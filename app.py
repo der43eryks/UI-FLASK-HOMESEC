@@ -214,4 +214,5 @@ def password_reset_reset():
 
 # === Run the Server ===
 if __name__ == '__main__':
-    app.run(debug=True, port=int(os.getenv('FLASK_PORT', 5000)))
+    port = int(os.getenv('PORT', 10000))
+    app.run(debug=False, host='0.0.0.0', port=port)
