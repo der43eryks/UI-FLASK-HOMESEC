@@ -3,6 +3,19 @@ if (sessionStorage.getItem("userEmail")) {
     window.location.href = "/dashboard";
 }
 
+// Add error message div if not present
+let errorDiv = document.getElementById('loginError');
+if (!errorDiv) {
+    errorDiv = document.createElement('div');
+    errorDiv.id = 'loginError';
+    errorDiv.style.color = 'red';
+    errorDiv.style.marginBottom = '10px';
+    errorDiv.style.textAlign = 'center';
+    const form = document.getElementById('loginForm');
+    form.insertBefore(errorDiv, document.getElementById('loginButton'));
+}
+errorDiv.textContent = '';
+
 document.getElementById('loginForm').addEventListener('submit', async function (e) {
     e.preventDefault();
 
@@ -11,9 +24,11 @@ document.getElementById('loginForm').addEventListener('submit', async function (
     const deviceId = document.getElementById('deviceId').value;
     const loginButton = document.getElementById('loginButton');
     const loadingText = document.getElementById('loadingText');
+    const errorDiv = document.getElementById('loginError');
 
     loginButton.disabled = true;
     loadingText.style.display = 'block';
+    errorDiv.textContent = '';
 
     try {
         const response = await fetch('/api/auth/login', {
@@ -26,13 +41,12 @@ document.getElementById('loginForm').addEventListener('submit', async function (
 
         if (response.ok) {
             sessionStorage.setItem("userEmail", email);
-            alert("Logged in successfully!");
             window.location.href = "/dashboard";
         } else {
-            alert(data.message || "Login failed. Please try again.");
+            errorDiv.textContent = data.message || "Login failed. Please try again.";
         }
     } catch (error) {
-        alert("Server error. Please try again later.");
+        errorDiv.textContent = "Server error. Please try again later.";
         console.error(error);
     } finally {
         loginButton.disabled = false;
