@@ -8,6 +8,7 @@ document.getElementById('loginForm').addEventListener('submit', async function (
 
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
+    const deviceId = document.getElementById('deviceId').value;
     const loginButton = document.getElementById('loginButton');
     const loadingText = document.getElementById('loadingText');
 
@@ -18,7 +19,7 @@ document.getElementById('loginForm').addEventListener('submit', async function (
         const response = await fetch('/api/auth/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password })
+            body: JSON.stringify({ email, password, deviceId })
         });
 
         const data = await response.json();
