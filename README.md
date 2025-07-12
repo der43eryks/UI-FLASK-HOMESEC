@@ -106,6 +106,7 @@ A modern web application for managing home security systems with real-time monit
 ### Authentication
 - `POST /api/auth/login` - User login with email, password, and device_id
 - `POST /api/auth/logout` - User logout (clears authentication cookie)
+- `GET /api/auth/session` - Check current session status and user info
 
 ### User Management
 - `GET /api/users/me` - Get current user profile and device information
@@ -142,11 +143,14 @@ A modern web application for managing home security systems with real-time monit
 
 ## 🔒 Security Features
 
-- Session-based authentication
-- CSRF protection
-- Secure password handling
-- Input validation
-- XSS prevention
+- **Secure Session Management**: Flask sessions with encrypted cookies
+- **CSRF Protection**: SameSite cookie policy and CSRF tokens
+- **Secure Password Handling**: Password validation and secure storage
+- **Input Validation**: Server-side validation for all user inputs
+- **XSS Prevention**: Content Security Policy and input sanitization
+- **HTTPS Enforcement**: Secure cookies only sent over HTTPS
+- **Session Expiration**: Automatic session timeout (1 hour)
+- **Secret Key Management**: Environment-based secret key configuration
 
 ## 📄 License
 
