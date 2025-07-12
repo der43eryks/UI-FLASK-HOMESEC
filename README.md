@@ -5,9 +5,25 @@ A modern web application for managing home security systems with real-time monit
 ## 🏗️ Project Structure
 
 ```
-Smart-Security/
+.
 ├── app.py                 # Main Flask application
 ├── requirements.txt       # Python dependencies
+<<<<<<< HEAD
+├── render.yaml            # Render deployment config
+├── README.md              # Project documentation
+├── templates/             # HTML templates
+│   ├── login.html         # Login page template
+│   └── dashboard.html     # Dashboard template
+└── static/                # Static assets
+    ├── css/               # Stylesheets
+    │   ├── login.css      # Login page styles
+    │   └── dashboard.css  # Dashboard styles
+    ├── js/                # JavaScript files
+    │   ├── login.js       # Login functionality
+    │   └── dashboard.js   # Dashboard functionality
+    └── images/            # Images and icons
+        └── favicon.ico    # Site favicon
+=======
 ├── render.yaml           # Render deployment config
 ├── README.md             # Project documentation
 ├── templates/            # HTML templates
@@ -22,6 +38,7 @@ Smart-Security/
     │   └── dashboard.js # Dashboard functionality
     └── images/          # Images and icons
         └── favicon.ico  # Site favicon
+>>>>>>> origin/main
 ```
 
 ## 📦 Version Control & .gitignore
@@ -34,7 +51,7 @@ Smart-Security/
   - `requirements.txt`
   - `app.py`
   - `README.md`
-  - `vercel.json`
+  - `render.yaml`
   - `templates/`
   - `static/`
 - **Never commit or push your `venv` folder or test scripts.**
@@ -46,7 +63,7 @@ Smart-Security/
   ```
 - When adding files, use:
   ```bash
-  git add requirements.txt app.py README.md vercel.json templates static
+  git add requirements.txt app.py README.md render.yaml templates static
   ```
   (Do **not** use `git add .`)
 
@@ -72,7 +89,7 @@ Smart-Security/
    ```
 
 3. **Access the application**:
-   - Open http://localhost:5000
+   - Open http://localhost:10000
    - Use test credentials: `admin@test.com` / `admin123`
 
 ## 🌐 Deployment
@@ -94,6 +111,12 @@ Smart-Security/
 3. **Environment Variables** (if needed):
    - Go to Render dashboard
    - Add any required environment variables in the service settings
+<<<<<<< HEAD
+
+4. **Production WSGI Server**:
+   - The app uses `gunicorn` for production deployment (see `render.yaml`)
+=======
+>>>>>>> origin/main
 
 ## 🔧 API Endpoints
 
@@ -103,6 +126,7 @@ Smart-Security/
 ### Authentication
 - `POST /api/auth/login` - User login with email, password, and device_id
 - `POST /api/auth/logout` - User logout (clears authentication cookie)
+- `GET /api/auth/session` - Check current session status and user info
 
 ### User Management
 - `GET /api/users/me` - Get current user profile and device information
@@ -127,7 +151,7 @@ Smart-Security/
 - **Backend**: Flask (Python)
 - **Frontend**: HTML5, CSS3, JavaScript (ES6+)
 - **Styling**: Custom CSS with responsive design
-- **Deployment**: Vercel
+- **Deployment**: Render (with gunicorn)
 - **API**: RESTful API with JSON responses
 
 ## 📱 Browser Support
@@ -139,11 +163,14 @@ Smart-Security/
 
 ## 🔒 Security Features
 
-- Session-based authentication
-- CSRF protection
-- Secure password handling
-- Input validation
-- XSS prevention
+- **Secure Session Management**: Flask sessions with encrypted cookies
+- **CSRF Protection**: SameSite cookie policy and CSRF tokens
+- **Secure Password Handling**: Password validation and secure storage
+- **Input Validation**: Server-side validation for all user inputs
+- **XSS Prevention**: Content Security Policy and input sanitization
+- **HTTPS Enforcement**: Secure cookies only sent over HTTPS
+- **Session Expiration**: Automatic session timeout (1 hour)
+- **Secret Key Management**: Environment-based secret key configuration
 
 ## 📄 License
 
@@ -154,3 +181,20 @@ This project is licensed under the MIT License.
 - The Flask backend now treats any HTTP response (not just 200 OK) from the backend API as a valid response.
 - This means users will see accurate backend error messages (e.g., invalid credentials, validation errors) instead of always seeing 'Both servers unavailable' for non-200 responses.
 - Debug logging for backend status code and response body is enabled in `get_api_response` for easier troubleshooting.
+
+## 🚨 Production Error Handling
+
+In production, user-facing error messages are designed to be friendly, secure, and non-technical. Examples include:
+- "An unexpected error occurred. Please try again later."
+- "Unable to log in at this time. Please try again later."
+- "You do not have permission to perform this action."
+- "The requested resource was not found."
+- "Service is temporarily unavailable. Please try again soon."
+
+**Best Practices:**
+- Never expose technical details, stack traces, or internal server errors to users.
+- Log detailed errors on the server for developers/ops.
+- Show generic, actionable messages to users.
+- Provide a support contact or help link for persistent issues.
+
+All API endpoints in this project follow these guidelines for error handling.

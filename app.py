@@ -1,5 +1,6 @@
 import os
-from flask import Flask, request, jsonify, redirect, send_from_directory, render_template, Response
+import time
+from flask import Flask, request, jsonify, redirect, send_from_directory, render_template, Response, session
 import requests
 from flask_cors import CORS
 from dotenv  import load_dotenv
@@ -10,15 +11,23 @@ load_dotenv()
 app = Flask(__name__, static_url_path='/static')
 CORS(app, supports_credentials=True)
 
-@app.after_request
-def after_request(response):
-    response.headers.add('Access-Control-Allow-Origin', '*')
-    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
-    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
-    return response
+# Flask Configuration with Secure Session Management
+app.config.update(
+    SECRET_KEY=os.environ.get('FLASK_SECRET_KEY', 'fallback-secret-key-change-in-production'),
+    SESSION_COOKIE_SECURE=True,      # Only send cookie over HTTPS
+    SESSION_COOKIE_HTTPONLY=True,    # Prevent JavaScript access to cookie
+    SESSION_COOKIE_SAMESITE='Lax',   # Mitigate CSRF attacks
+    SESSION_COOKIE_MAX_AGE=3600,     # Session expires in 1 hour
+    PERMANENT_SESSION_LIFETIME=3600  # Session lifetime in seconds
+)
 
-LOCAL_API = os.getenv('LOCAL_API_URL')
-ONLINE_API = os.getenv('ONLINE_API_URL')
+# FRONTEND/UI URL (for reference, not for API calls)
+ONLINE_CLIENT_RENDER = os.getenv('ONLINE_CLIENT_RENDER')
+app.config['ONLINE_CLIENT_RENDER'] = ONLINE_CLIENT_RENDER
+
+# BACKEND/API URL (for all proxied API calls)
+ONLINE_API = os.getenv('ONLINE_API_URL', 'https://homesecurity-cw0e.onrender.com')
+LOCAL_API = os.getenv('LOCAL_API_URL', ONLINE_API)
 API_TIMEOUT = int(os.getenv('API_TIMEOUT', 2))
 
 
@@ -49,6 +58,20 @@ def get_api_response(endpoint, method='GET', data=None, timeout=API_TIMEOUT):
             continue
     return None, None
 
+# === Session Management Helper ===
+def is_user_logged_in():
+    """Check if user is logged in and session is valid"""
+    if not session.get('logged_in'):
+        return False
+    
+    # Check if session has expired (1 hour)
+    login_time = session.get('login_time', 0)
+    if time.time() - login_time > 3600:
+        session.clear()
+        return False
+    
+    return True
+
 # === Frontend Pages ===
 @app.route('/')
 def home():
@@ -77,29 +100,51 @@ def health_check():
 
 # === Authentication ===
 @app.route('/api/auth/login', methods=['POST'])
-def auth_login():
+def proxy_login():
     data = request.json
-    if data and data.get('email') == 'admin@test.com' and data.get('password') == 'admin123':
-        return jsonify({
-            "message": "Login successful",
-            "user": {
-                "email": data.get('email'),
-                "name": "Admin Tester"
-            }
-        }), 200
-    response, server = get_api_response('/api/auth/login', 'POST', data)
-    if response:
-        return jsonify(response.json()), response.status_code
-    else:
-        return jsonify({'error': 'Backend unavailable or error occurred'}), 500
+    try:
+        resp = requests.post(
+            f"{ONLINE_API}/api/auth/login",
+            json=data,
+            headers={"Content-Type": "application/json"},
+            cookies=request.cookies
+        )
+        if resp.status_code == 200:
+            # Store user session data securely
+            session['logged_in'] = True
+            session['user_email'] = data.get('email', '')
+            session['login_time'] = int(time.time())
+            
+            return jsonify({"success": True, "message": "Login successful"}), 200
+        else:
+            return jsonify({"success": False, "error": resp.json().get("error", "Login failed")}), resp.status_code
+    except Exception as e:
+        return jsonify({"success": False, "error": "An error occurred while logging in."}), 500
 
 @app.route('/api/auth/logout', methods=['POST'])
 def auth_logout():
+    # Clear Flask session
+    session.clear()
+    
+    # Forward logout request to backend
     response, server = get_api_response('/api/auth/logout', 'POST')
     if response:
         return jsonify(response.json()), response.status_code
     else:
         return jsonify({'error': 'Backend unavailable or error occurred'}), 500
+
+# === Session Check ===
+@app.route('/api/auth/session', methods=['GET'])
+def check_session():
+    """Check if user session is valid"""
+    if is_user_logged_in():
+        return jsonify({
+            "logged_in": True,
+            "user_email": session.get('user_email', ''),
+            "login_time": session.get('login_time', 0)
+        }), 200
+    else:
+        return jsonify({"logged_in": False}), 401
 
 # === User Management ===
 @app.route('/api/users/me', methods=['GET'])
@@ -109,6 +154,20 @@ def users_me():
         return jsonify(response.json()), response.status_code
     else:
         return jsonify({'error': 'Backend unavailable or error occurred'}), 500
+
+@app.route('/api/users/profile', methods=['GET'])
+def proxy_user_profile():
+    try:
+        resp = requests.get(
+            f"{ONLINE_API}/api/users/profile",
+            cookies=request.cookies
+        )
+        if resp.status_code == 200:
+            return jsonify(resp.json()), 200
+        else:
+            return jsonify({"error": resp.json().get("error", "Failed to retrieve user profile")}), resp.status_code
+    except Exception as e:
+        return jsonify({"error": "An error occurred while retrieving user profile."}), 500
 
 @app.route('/api/users/email', methods=['PUT'])
 def update_email():
@@ -161,29 +220,23 @@ def alerts():
         return jsonify({'error': 'Backend unavailable or error occurred'}), 500
 
 @app.route('/api/sse/alerts', methods=['GET'])
-def sse_alerts():
+def proxy_sse_alerts():
     def generate():
-        servers = [
-            (LOCAL_API, 'local'),
-            (ONLINE_API, 'online')
-        ]
-        
-        for server_url, server_name in servers:
-            if not server_url:
-                continue
+        backend_url = f"{ONLINE_API}/api/sse/alerts"
+        headers = {"Accept": "text/event-stream"}
+        while True:
             try:
-                response = requests.get(f'{server_url}/api/sse/alerts', stream=True, timeout=API_TIMEOUT)
-                for chunk in response.iter_content(chunk_size=1024):
-                    if chunk:
-                        yield f"data: {chunk.decode('utf-8')}\n\n"
-                break  # If successful, don't try the next server
+                with requests.get(backend_url, stream=True, headers=headers, timeout=60) as resp:
+                    for line in resp.iter_lines():
+                        if line:
+                            data = line.decode('utf-8')
+                            if data.startswith('data: '):
+                                yield f"data: {data[6:]}\n\n"
             except Exception as e:
-                print(f"❌ {server_name} SSE server failed: {str(e)}")
-                continue
-        
-        # If all servers fail, send error
-        yield f"data: {{\"error\": \"All servers unavailable\"}}\n\n"
-    
+                print(f"SSE proxy error: {e}")
+                yield f"data: {{\"error\": \"SSE connection error, retrying...\"}}\n\n"
+                import time
+                time.sleep(5)  # Wait before reconnecting
     return Response(
         generate(),
         mimetype='text/event-stream',
@@ -202,7 +255,7 @@ def password_reset_request():
     if response:
         return jsonify(response.json()), response.status_code
     else:
-        return jsonify({'error': 'Backend unavailable or error occurred'}), 500
+        return jsonify({'error': 'error occurred while logging in'}), 500
 
 @app.route('/api/password-resets/reset', methods=['POST'])
 def password_reset_reset():
@@ -211,6 +264,11 @@ def password_reset_reset():
         return jsonify(response.json()), response.status_code
     else:
         return jsonify({'error': 'Backend unavailable or error occurred'}), 500
+
+# Make ONLINE_CLIENT_RENDER available in all templates
+@app.context_processor
+def inject_online_client_render():
+    return dict(ONLINE_CLIENT_RENDER=ONLINE_CLIENT_RENDER)
 
 # === Run the Server ===
 if __name__ == '__main__':

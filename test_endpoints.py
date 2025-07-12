@@ -1,7 +1,7 @@
 import requests
 import json
 
-BASE_URL = "http://localhost:5000"
+BASE_URL = "https://ui-flask-homesec.onrender.com"
 
 def test_endpoint(method, endpoint, data=None, headers=None):
     """Test an endpoint and return status code and response"""
