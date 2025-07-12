@@ -83,29 +83,30 @@ Smart-Security/
 
 ## 🔧 API Endpoints
 
+### Health Check
+- `GET /api/health` - Check server and database status
+
 ### Authentication
-- `POST /api/auth/login` - User login
-- `POST /api/auth/logout` - User logout
+- `POST /api/auth/login` - User login with email, password, and device_id
+- `POST /api/auth/logout` - User logout (clears authentication cookie)
 
 ### User Management
-- `GET /api/users/me` - Get user profile
-- `PUT /api/users/email` - Update email
-- `PUT /api/users/phone` - Update phone
-- `PUT /api/users/password` - Change password
+- `GET /api/users/me` - Get current user profile and device information
+- `PUT /api/users/email` - Update user email address
+- `PUT /api/users/phone` - Update user phone number
+- `PUT /api/users/password` - Change user password (requires old password)
 
-### Device Control
-- `GET /api/devices/me` - Get user devices
-- `GET /api/devices/status` - Get device status
-- `POST /api/devices/{device}/lock-toggle` - Toggle device lock
-- `POST /api/devices/led/toggle` - Toggle LED light
+### Device Management
+- `GET /api/devices/me` - Get current device information
+- `GET /api/devices/status` - Get current device status (online/offline)
 
 ### Alerts
-- `GET /api/alerts` - Get alerts
-- `GET /api/sse/alerts` - Server-sent events for alerts
+- `GET /api/alerts` - Get user's alert history
+- `GET /api/sse/alerts` - Server-Sent Events stream for real-time alerts
 
 ### Password Reset
-- `POST /api/password-resets/request` - Request password reset
-- `POST /api/password-resets/reset` - Reset password
+- `POST /api/password-resets/request` - Request password reset (requires email and device_id)
+- `POST /api/password-resets/reset` - Reset password with token
 
 ## 🎨 Technologies Used
 

@@ -24,6 +24,15 @@ def dashboard_page():
 def serve_static(path):
     return send_from_directory('static', path)
 
+# === Health Check ===
+@app.route('/api/health', methods=['GET'])
+def health_check():
+    try:
+        response = requests.get(f'{API_BASE}/api/health')
+        return jsonify(response.json()), response.status_code
+    except Exception as e:
+        return jsonify({'message': str(e)}), 500
+
 # === Authentication ===
 @app.route('/api/auth/login', methods=['POST'])
 def auth_login():
@@ -45,7 +54,6 @@ def auth_login():
         return jsonify(response.json()), response.status_code
     except Exception as e:
         return jsonify({'message': str(e)}), 500
-
 
 @app.route('/api/auth/logout', methods=['POST'])
 def auth_logout():
@@ -88,7 +96,7 @@ def update_password():
     except Exception as e:
         return jsonify({'message': str(e)}), 500
 
-# === Device Info ===
+# === Device Management ===
 @app.route('/api/devices/me', methods=['GET'])
 def devices_me():
     try:

@@ -59,19 +59,9 @@ async function fetchDeviceStatuses() {
     }
 }
 
-function toggleLock(deviceId) {
-    fetch(`/api/devices/${deviceId}/lock-toggle`, { method: 'POST' })
-        .then(res => res.json())
-        .then(data => { fetchDeviceStatuses(); addAlert(data.message); })
-        .catch(() => alert("Toggle failed"));
-}
-
-function toggleLed() {
-    fetch('/api/devices/led/toggle', { method: 'POST' })
-        .then(res => res.json())
-        .then(data => { fetchDeviceStatuses(); addAlert(data.message); })
-        .catch(() => alert("LED toggle failed"));
-}
+// Device control functions removed - not in official endpoint list
+// function toggleLock(deviceId) { ... }
+// function toggleLed() { ... }
 
 function addAlert(message) {
     const alertsList = document.getElementById('alertsList');
