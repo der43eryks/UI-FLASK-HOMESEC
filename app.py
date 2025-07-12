@@ -1,7 +1,9 @@
-from flask import Flask, request, jsonify, redirect, send_from_directory
+from flask import Flask, request, jsonify, redirect, send_from_directory, render_template
 import requests
+from flask_cors import CORS
 
 app = Flask(__name__, static_url_path='/static')
+CORS(app, supports_credentials=True)
 
 API_BASE = 'https://homesecurity-cw0e.onrender.com'
 
@@ -12,11 +14,11 @@ def home():
 
 @app.route('/login')
 def login_page():
-    return send_from_directory('.', 'login.html')
+    return render_template('login.html')
 
 @app.route('/dashboard')
 def dashboard_page():
-    return send_from_directory('.', 'dashboard.html')
+    return render_template('dashboard.html')
 
 @app.route('/static/<path:path>')
 def serve_static(path):

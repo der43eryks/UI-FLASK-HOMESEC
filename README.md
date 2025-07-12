@@ -1,2 +1,136 @@
-# Smart Security
+# Smart Security Dashboard
+
+A modern web application for managing home security systems with real-time monitoring and control capabilities.
+
+## 🏗️ Project Structure
+
+```
+Smart-Security/
+├── app.py                 # Main Flask application
+├── requirements.txt       # Python dependencies
+├── vercel.json           # Vercel deployment config
+├── README.md             # Project documentation
+├── templates/            # HTML templates
+│   ├── login.html       # Login page template
+│   └── dashboard.html   # Dashboard template
+└── static/              # Static assets
+    ├── css/             # Stylesheets
+    │   ├── login.css    # Login page styles
+    │   └── dashboard.css # Dashboard styles
+    ├── js/              # JavaScript files
+    │   ├── login.js     # Login functionality
+    │   └── dashboard.js # Dashboard functionality
+    └── images/          # Images and icons
+        └── favicon.ico  # Site favicon
+```
+
+## 🚀 Features
+
+- **User Authentication**: Secure login system with session management
+- **Real-time Monitoring**: Live status updates for security devices
+- **Device Control**: Remote control of locks, lights, and sensors
+- **Alert System**: Real-time notifications for security events
+- **User Profile**: Manage account settings and password changes
+- **Responsive Design**: Works on desktop and mobile devices
+
+## 🛠️ Local Development
+
+1. **Install dependencies**:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+2. **Run the development server**:
+   ```bash
+   python app.py
+   ```
+
+3. **Access the application**:
+   - Open http://localhost:5000
+   - Use test credentials: `admin@test.com` / `admin123`
+
+## 🌐 Deployment
+
+### Vercel Deployment
+
+1. **Install Vercel CLI**:
+   ```bash
+   npm i -g vercel
+   ```
+
+2. **Deploy to Vercel**:
+   ```bash
+   vercel
+   ```
+
+3. **Set environment variables** (if needed):
+   - Go to Vercel dashboard
+   - Add any required environment variables
+
+### Manual Deployment
+
+1. **Push to GitHub**:
+   ```bash
+   git add .
+   git commit -m "Initial commit"
+   git push origin main
+   ```
+
+2. **Connect to Vercel**:
+   - Import your GitHub repository
+   - Vercel will automatically detect the Python project
+   - Deploy with default settings
+
+## 🔧 API Endpoints
+
+### Authentication
+- `POST /api/auth/login` - User login
+- `POST /api/auth/logout` - User logout
+
+### User Management
+- `GET /api/users/me` - Get user profile
+- `PUT /api/users/email` - Update email
+- `PUT /api/users/phone` - Update phone
+- `PUT /api/users/password` - Change password
+
+### Device Control
+- `GET /api/devices/me` - Get user devices
+- `GET /api/devices/status` - Get device status
+- `POST /api/devices/{device}/lock-toggle` - Toggle device lock
+- `POST /api/devices/led/toggle` - Toggle LED light
+
+### Alerts
+- `GET /api/alerts` - Get alerts
+- `GET /api/sse/alerts` - Server-sent events for alerts
+
+### Password Reset
+- `POST /api/password-resets/request` - Request password reset
+- `POST /api/password-resets/reset` - Reset password
+
+## 🎨 Technologies Used
+
+- **Backend**: Flask (Python)
+- **Frontend**: HTML5, CSS3, JavaScript (ES6+)
+- **Styling**: Custom CSS with responsive design
+- **Deployment**: Vercel
+- **API**: RESTful API with JSON responses
+
+## 📱 Browser Support
+
+- Chrome (recommended)
+- Firefox
+- Safari
+- Edge
+
+## 🔒 Security Features
+
+- Session-based authentication
+- CSRF protection
+- Secure password handling
+- Input validation
+- XSS prevention
+
+## 📄 License
+
+This project is licensed under the MIT License.
 

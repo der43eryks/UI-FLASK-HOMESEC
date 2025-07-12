@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Security Dashboard</title>
+    <link rel="icon" href="/static/images/favicon.ico">
+    <link rel="stylesheet" href="/static/css/dashboard.css">
+</head>
+<body>
+    <header>
+        <h1>Smart Security Dashboard</h1>
+        <div class="header-buttons">
+            <button onclick="openProfileModal()">Profile</button>
+            <button class="signout" onclick="signOut()">Sign Out</button>
+        </div>
+    </header>
+    <main class="container">
+        <section class="status-section">
+            <h2>Security Status</h2>
+            <div class="status-card inactive" id="motionSensor">
+                <h3>Motion Sensor</h3>
+                <p>Status: <span class="status-text">No Motion</span></p>
+            </div>
+            <div class="status-card active" id="distanceSensor">
+                <h3>Distance Sensor</h3>
+                <p>Distance: <span class="status-text">--</span></p>
+            </div>
+            <div class="status-card inactive" id="rfidReader">
+                <h3>RFID Reader</h3>
+                <p>Last Scan: <span class="status-text">None</span></p>
+            </div>
+            <div class="status-card locked" id="frontDoor">
+                <h3>Front Door</h3>
+                <p>Status: <span class="status-text">Locked</span></p>
+                <button onclick="toggleLock('frontDoor')">Toggle Lock</button>
+            </div>
+            <div class="status-card locked" id="backDoor">
+                <h3>Back Door</h3>
+                <p>Status: <span class="status-text">Locked</span></p>
+                <button onclick="toggleLock('backDoor')">Toggle Lock</button>
+            </div>
+            <div class="status-card locked" id="window1">
+                <h3>Living Room Window</h3>
+                <p>Status: <span class="status-text">Locked</span></p>
+                <button onclick="toggleLock('window1')">Toggle Lock</button>
+            </div>
+        </section>
+        <section class="alerts-section">
+            <h2>Alerts & Notifications</h2>
+            <ul class="alerts-list" id="alertsList">
+                <li>No alerts at the moment</li>
+            </ul>
+        </section>
+        <section class="status-section">
+            <h2>Lighting Control</h2>
+            <div class="status-card led-off" id="ledLight">
+                <h3>Main LED Light</h3>
+                <p>Status: <span class="status-text">Off</span></p>
+                <button onclick="toggleLed()">Toggle LED</button>
+            </div>
+        </section>
+    </main>
+    <footer><p>&copy; 2025 SmartHome Security</p></footer>
+    <div class="modal" id="profileModal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeProfileModal()">&times;</button>
+            <h3>User Profile Settings</h3>
+            <label for="fullName">Full Name:</label>
+            <input type="text" id="fullName" value="John Doe">
+            <label for="email">Email:</label>
+            <input type="email" id="email" disabled value="user@example.com">
+            <label for="phoneNumber">Phone Number:</label>
+            <input type="tel" id="phoneNumber" value="+1234567890">
+            <button onclick="saveProfile()">Save Profile</button>
+            <button onclick="togglePasswordChangeSection()">Change Password</button>
+            <div class="password-change-section" id="passwordChangeSection">
+                <h4>Change Password</h4>
+                <label for="currentPassword">Current Password:</label>
+                <input type="password" id="currentPassword">
+                <label for="newPassword">New Password:</label>
+                <input type="password" id="newPassword">
+                <label for="confirmNewPassword">Confirm New Password:</label>
+                <input type="password" id="confirmNewPassword">
+                <button onclick="changePassword()">Submit New Password</button>
+            </div>
+            <button onclick="resetPassword()">Reset Password via Email</button>
+        </div>
+    </div>
+    <script src="/static/js/dashboard.js"></script>
+</body>
+</html> 
