@@ -8,7 +8,7 @@ A modern web application for managing home security systems with real-time monit
 Smart-Security/
 ├── app.py                 # Main Flask application
 ├── requirements.txt       # Python dependencies
-├── vercel.json           # Vercel deployment config
+├── render.yaml           # Render deployment config
 ├── README.md             # Project documentation
 ├── templates/            # HTML templates
 │   ├── login.html       # Login page template
@@ -77,35 +77,23 @@ Smart-Security/
 
 ## 🌐 Deployment
 
-### Vercel Deployment
+### Render Deployment
 
-1. **Install Vercel CLI**:
+1. **Deploy to Render**:
+   - Connect your GitHub repository to Render
+   - Render will automatically detect the Python project
+   - Use the `render.yaml` configuration file for deployment settings
+
+2. **Manual Deployment**:
    ```bash
-   npm i -g vercel
-   ```
-
-2. **Deploy to Vercel**:
-   ```bash
-   vercel
-   ```
-
-3. **Set environment variables** (if needed):
-   - Go to Vercel dashboard
-   - Add any required environment variables
-
-### Manual Deployment
-
-1. **Push to GitHub**:
-   ```bash
-   git add requirements.txt app.py README.md vercel.json templates static
-   git commit -m "Initial commit"
+   git add requirements.txt app.py README.md render.yaml templates static
+   git commit -m "Deploy to Render"
    git push origin main
    ```
 
-2. **Connect to Vercel**:
-   - Import your GitHub repository
-   - Vercel will automatically detect the Python project
-   - Deploy with default settings
+3. **Environment Variables** (if needed):
+   - Go to Render dashboard
+   - Add any required environment variables in the service settings
 
 ## 🔧 API Endpoints
 
