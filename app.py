@@ -10,6 +10,13 @@ load_dotenv()
 app = Flask(__name__, static_url_path='/static')
 CORS(app, supports_credentials=True)
 
+@app.after_request
+def after_request(response):
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+    return response
+
 LOCAL_API = os.getenv('LOCAL_API_URL')
 ONLINE_API = os.getenv('ONLINE_API_URL')
 API_TIMEOUT = int(os.getenv('API_TIMEOUT', 2))
