@@ -43,7 +43,15 @@ document.getElementById('loginForm').addEventListener('submit', async function (
             sessionStorage.setItem("userEmail", email);
             window.location.href = "/dashboard";
         } else {
-            errorDiv.textContent = data.message || "Login failed. Please try again.";
+            if (data.error) {
+                errorDiv.textContent = data.error;
+            } else if (data.errors && Array.isArray(data.errors)) {
+                errorDiv.textContent = data.errors.map(e => e.msg || e.error || JSON.stringify(e)).join(', ');
+            } else if (data.message) {
+                errorDiv.textContent = data.message;
+            } else {
+                errorDiv.textContent = "Login failed. Please try again.";
+            }
         }
     } catch (error) {
         errorDiv.textContent = "Server error. Please try again later.";
