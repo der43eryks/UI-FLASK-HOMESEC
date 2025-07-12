@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, redirect, send_from_directory, render_template
+from flask import Flask, request, jsonify, redirect, send_from_directory, render_template, Response
 import requests
 from flask_cors import CORS
 
@@ -124,11 +124,32 @@ def alerts():
 
 @app.route('/api/sse/alerts', methods=['GET'])
 def sse_alerts():
-    try:
-        response = requests.get(f'{API_BASE}/api/sse/alerts', stream=True)
-        return response.raw.read(), response.status_code, response.headers.items()
-    except Exception as e:
-        return jsonify({'message': str(e)}), 500
+    def generate():
+        try:
+            # Forward the request to the external API
+            response = requests.get(f'{API_BASE}/api/sse/alerts', stream=True)
+            
+            # Set proper SSE headers
+            yield f"data: {response.text}\n\n"
+            
+            # Stream the response
+            for chunk in response.iter_content(chunk_size=1024):
+                if chunk:
+                    yield f"data: {chunk.decode('utf-8')}\n\n"
+                    
+        except Exception as e:
+            yield f"data: {{\"error\": \"{str(e)}\"}}\n\n"
+    
+    return Response(
+        generate(),
+        mimetype='text/event-stream',
+        headers={
+            'Cache-Control': 'no-cache',
+            'Connection': 'keep-alive',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Credentials': 'true'
+        }
+    )
 
 # === Password Resets ===
 @app.route('/api/password-resets/request', methods=['POST'])
