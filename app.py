@@ -2,7 +2,7 @@ import os
 from flask import Flask, request, jsonify, redirect, send_from_directory, render_template, Response
 import requests
 from flask_cors import CORS
-from dotenv import load_dotenv
+from dotenv  import load_dotenv
 
 # Load environment variables
 load_dotenv()
@@ -71,11 +71,11 @@ def health_check():
 @app.route('/api/auth/login', methods=['POST'])
 def auth_login():
     data = request.json
-    if data['email'] == 'admin@test.com' and data['password'] == 'admin123':
+    if data and data.get('email') == 'admin@test.com' and data.get('password') == 'admin123':
         return jsonify({
             "message": "Login successful",
             "user": {
-                "email": data['email'],
+                "email": data.get('email'),
                 "name": "Admin Tester"
             }
         }), 200
