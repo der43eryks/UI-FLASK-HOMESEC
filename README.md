@@ -8,6 +8,7 @@ A modern web application for managing home security systems with real-time monit
 .
 ├── app.py                 # Main Flask application
 ├── requirements.txt       # Python dependencies
+<<<<<<< HEAD
 ├── render.yaml            # Render deployment config
 ├── README.md              # Project documentation
 ├── templates/             # HTML templates
@@ -22,6 +23,22 @@ A modern web application for managing home security systems with real-time monit
     │   └── dashboard.js   # Dashboard functionality
     └── images/            # Images and icons
         └── favicon.ico    # Site favicon
+=======
+├── render.yaml           # Render deployment config
+├── README.md             # Project documentation
+├── templates/            # HTML templates
+│   ├── login.html       # Login page template
+│   └── dashboard.html   # Dashboard template
+└── static/              # Static assets
+    ├── css/             # Stylesheets
+    │   ├── login.css    # Login page styles
+    │   └── dashboard.css # Dashboard styles
+    ├── js/              # JavaScript files
+    │   ├── login.js     # Login functionality
+    │   └── dashboard.js # Dashboard functionality
+    └── images/          # Images and icons
+        └── favicon.ico  # Site favicon
+>>>>>>> origin/main
 ```
 
 ## 📦 Version Control & .gitignore
@@ -94,9 +111,12 @@ A modern web application for managing home security systems with real-time monit
 3. **Environment Variables** (if needed):
    - Go to Render dashboard
    - Add any required environment variables in the service settings
+<<<<<<< HEAD
 
 4. **Production WSGI Server**:
    - The app uses `gunicorn` for production deployment (see `render.yaml`)
+=======
+>>>>>>> origin/main
 
 ## 🔧 API Endpoints
 
