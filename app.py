@@ -10,8 +10,8 @@ load_dotenv()
 app = Flask(__name__, static_url_path='/static')
 CORS(app, supports_credentials=True)
 
-LOCAL_API = os.getenv('LOCAL_API_URL', 'http://localhost:4000')
-ONLINE_API = os.getenv('ONLINE_API_URL', 'https://homesecurity-cw0e.onrender.com')
+LOCAL_API = os.getenv('LOCAL_API_URL')
+ONLINE_API = os.getenv('ONLINE_API_URL')
 API_TIMEOUT = int(os.getenv('API_TIMEOUT', 2))
 
 
@@ -155,19 +155,27 @@ def alerts():
 @app.route('/api/sse/alerts', methods=['GET'])
 def sse_alerts():
     def generate():
-        try:
-            response = requests.get(f'{LOCAL_API}/api/sse/alerts', stream=True, timeout=API_TIMEOUT)
-            for chunk in response.iter_content(chunk_size=1024):
-                if chunk:
-                    yield f"data: {chunk.decode('utf-8')}\n\n"
-        except:
+        servers = [
+            (LOCAL_API, 'local'),
+            (ONLINE_API, 'online')
+        ]
+        
+        for server_url, server_name in servers:
+            if not server_url:
+                continue
             try:
-                response = requests.get(f'{ONLINE_API}/api/sse/alerts', stream=True)
+                response = requests.get(f'{server_url}/api/sse/alerts', stream=True, timeout=API_TIMEOUT)
                 for chunk in response.iter_content(chunk_size=1024):
                     if chunk:
                         yield f"data: {chunk.decode('utf-8')}\n\n"
+                break  # If successful, don't try the next server
             except Exception as e:
-                yield f"data: {{\"error\": \"{str(e)}\"}}\n\n"
+                print(f"❌ {server_name} SSE server failed: {str(e)}")
+                continue
+        
+        # If all servers fail, send error
+        yield f"data: {{\"error\": \"All servers unavailable\"}}\n\n"
+    
     return Response(
         generate(),
         mimetype='text/event-stream',

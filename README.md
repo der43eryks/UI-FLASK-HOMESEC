@@ -24,6 +24,32 @@ Smart-Security/
         └── favicon.ico  # Site favicon
 ```
 
+## 📦 Version Control & .gitignore
+
+- The following are **always ignored** by git (see `.gitignore`):
+  - `venv/` (Python virtual environment)
+  - `__pycache__/` (Python bytecode cache)
+  - All test scripts (e.g., `test_*.py`, `*test*.py`)
+- **Only these files/folders are tracked in version control:**
+  - `requirements.txt`
+  - `app.py`
+  - `README.md`
+  - `vercel.json`
+  - `templates/`
+  - `static/`
+- **Never commit or push your `venv` folder or test scripts.**
+- If you accidentally committed `venv`, remove it with:
+  ```bash
+  git rm -r --cached venv
+  git commit -m "Remove venv from version control"
+  git push
+  ```
+- When adding files, use:
+  ```bash
+  git add requirements.txt app.py README.md vercel.json templates static
+  ```
+  (Do **not** use `git add .`)
+
 ## 🚀 Features
 
 - **User Authentication**: Secure login system with session management
@@ -71,7 +97,7 @@ Smart-Security/
 
 1. **Push to GitHub**:
    ```bash
-   git add .
+   git add requirements.txt app.py README.md vercel.json templates static
    git commit -m "Initial commit"
    git push origin main
    ```
