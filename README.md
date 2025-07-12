@@ -157,3 +157,20 @@ This project is licensed under the MIT License.
 - The Flask backend now treats any HTTP response (not just 200 OK) from the backend API as a valid response.
 - This means users will see accurate backend error messages (e.g., invalid credentials, validation errors) instead of always seeing 'Both servers unavailable' for non-200 responses.
 - Debug logging for backend status code and response body is enabled in `get_api_response` for easier troubleshooting.
+
+## 🚨 Production Error Handling
+
+In production, user-facing error messages are designed to be friendly, secure, and non-technical. Examples include:
+- "An unexpected error occurred. Please try again later."
+- "Unable to log in at this time. Please try again later."
+- "You do not have permission to perform this action."
+- "The requested resource was not found."
+- "Service is temporarily unavailable. Please try again soon."
+
+**Best Practices:**
+- Never expose technical details, stack traces, or internal server errors to users.
+- Log detailed errors on the server for developers/ops.
+- Show generic, actionable messages to users.
+- Provide a support contact or help link for persistent issues.
+
+All API endpoints in this project follow these guidelines for error handling.
