@@ -73,7 +73,7 @@ def health_check():
     if response:
         return jsonify(response.json()), response.status_code
     else:
-        return jsonify({'message': 'Both servers unavailable'}), 500
+        return jsonify({'error': 'Backend unavailable or error occurred'}), 500
 
 # === Authentication ===
 @app.route('/api/auth/login', methods=['POST'])
@@ -91,7 +91,7 @@ def auth_login():
     if response:
         return jsonify(response.json()), response.status_code
     else:
-        return jsonify({'message': 'Both servers unavailable'}), 500
+        return jsonify({'error': 'Backend unavailable or error occurred'}), 500
 
 @app.route('/api/auth/logout', methods=['POST'])
 def auth_logout():
@@ -99,7 +99,7 @@ def auth_logout():
     if response:
         return jsonify(response.json()), response.status_code
     else:
-        return jsonify({'message': 'Both servers unavailable'}), 500
+        return jsonify({'error': 'Backend unavailable or error occurred'}), 500
 
 # === User Management ===
 @app.route('/api/users/me', methods=['GET'])
@@ -108,7 +108,7 @@ def users_me():
     if response:
         return jsonify(response.json()), response.status_code
     else:
-        return jsonify({'message': 'Both servers unavailable'}), 500
+        return jsonify({'error': 'Backend unavailable or error occurred'}), 500
 
 @app.route('/api/users/email', methods=['PUT'])
 def update_email():
@@ -116,7 +116,7 @@ def update_email():
     if response:
         return jsonify(response.json()), response.status_code
     else:
-        return jsonify({'message': 'Both servers unavailable'}), 500
+        return jsonify({'error': 'Backend unavailable or error occurred'}), 500
 
 @app.route('/api/users/phone', methods=['PUT'])
 def update_phone():
@@ -124,7 +124,7 @@ def update_phone():
     if response:
         return jsonify(response.json()), response.status_code
     else:
-        return jsonify({'message': 'Both servers unavailable'}), 500
+        return jsonify({'error': 'Backend unavailable or error occurred'}), 500
 
 @app.route('/api/users/password', methods=['PUT'])
 def update_password():
@@ -132,7 +132,7 @@ def update_password():
     if response:
         return jsonify(response.json()), response.status_code
     else:
-        return jsonify({'message': 'Both servers unavailable'}), 500
+        return jsonify({'error': 'Backend unavailable or error occurred'}), 500
 
 # === Device Management ===
 @app.route('/api/devices/me', methods=['GET'])
@@ -141,7 +141,7 @@ def devices_me():
     if response:
         return jsonify(response.json()), response.status_code
     else:
-        return jsonify({'message': 'Both servers unavailable'}), 500
+        return jsonify({'error': 'Backend unavailable or error occurred'}), 500
 
 @app.route('/api/devices/status', methods=['GET'])
 def devices_status():
@@ -149,7 +149,7 @@ def devices_status():
     if response:
         return jsonify(response.json()), response.status_code
     else:
-        return jsonify({'message': 'Both servers unavailable'}), 500
+        return jsonify({'error': 'Backend unavailable or error occurred'}), 500
 
 # === Alerts ===
 @app.route('/api/alerts', methods=['GET'])
@@ -158,7 +158,7 @@ def alerts():
     if response:
         return jsonify(response.json()), response.status_code
     else:
-        return jsonify({'message': 'Both servers unavailable'}), 500
+        return jsonify({'error': 'Backend unavailable or error occurred'}), 500
 
 @app.route('/api/sse/alerts', methods=['GET'])
 def sse_alerts():
@@ -202,7 +202,7 @@ def password_reset_request():
     if response:
         return jsonify(response.json()), response.status_code
     else:
-        return jsonify({'message': 'Both servers unavailable'}), 500
+        return jsonify({'error': 'Backend unavailable or error occurred'}), 500
 
 @app.route('/api/password-resets/reset', methods=['POST'])
 def password_reset_reset():
@@ -210,7 +210,7 @@ def password_reset_reset():
     if response:
         return jsonify(response.json()), response.status_code
     else:
-        return jsonify({'message': 'Both servers unavailable'}), 500
+        return jsonify({'error': 'Backend unavailable or error occurred'}), 500
 
 # === Run the Server ===
 if __name__ == '__main__':
