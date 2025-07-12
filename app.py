@@ -10,15 +10,13 @@ load_dotenv()
 app = Flask(__name__, static_url_path='/static')
 CORS(app, supports_credentials=True)
 
-@app.after_request
-def after_request(response):
-    response.headers.add('Access-Control-Allow-Origin', '*')
-    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
-    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
-    return response
+# FRONTEND/UI URL (for reference, not for API calls)
+ONLINE_CLIENT_RENDER = os.getenv('ONLINE_CLIENT_RENDER')
+app.config['ONLINE_CLIENT_RENDER'] = ONLINE_CLIENT_RENDER
 
-LOCAL_API = os.getenv('LOCAL_API_URL')
-ONLINE_API = os.getenv('ONLINE_API_URL')
+# BACKEND/API URL (for all proxied API calls)
+ONLINE_API = os.getenv('ONLINE_API_URL', 'https://homesecurity-cw0e.onrender.com')
+LOCAL_API = os.getenv('LOCAL_API_URL', ONLINE_API)
 API_TIMEOUT = int(os.getenv('API_TIMEOUT', 2))
 
 
@@ -211,6 +209,11 @@ def password_reset_reset():
         return jsonify(response.json()), response.status_code
     else:
         return jsonify({'error': 'Backend unavailable or error occurred'}), 500
+
+# Make ONLINE_CLIENT_RENDER available in all templates
+@app.context_processor
+def inject_online_client_render():
+    return dict(ONLINE_CLIENT_RENDER=ONLINE_CLIENT_RENDER)
 
 # === Run the Server ===
 if __name__ == '__main__':
