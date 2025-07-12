@@ -5,23 +5,23 @@ A modern web application for managing home security systems with real-time monit
 ## 🏗️ Project Structure
 
 ```
-Smart-Security/
+.
 ├── app.py                 # Main Flask application
 ├── requirements.txt       # Python dependencies
-├── vercel.json           # Vercel deployment config
-├── README.md             # Project documentation
-├── templates/            # HTML templates
-│   ├── login.html       # Login page template
-│   └── dashboard.html   # Dashboard template
-└── static/              # Static assets
-    ├── css/             # Stylesheets
-    │   ├── login.css    # Login page styles
-    │   └── dashboard.css # Dashboard styles
-    ├── js/              # JavaScript files
-    │   ├── login.js     # Login functionality
-    │   └── dashboard.js # Dashboard functionality
-    └── images/          # Images and icons
-        └── favicon.ico  # Site favicon
+├── render.yaml            # Render deployment config
+├── README.md              # Project documentation
+├── templates/             # HTML templates
+│   ├── login.html         # Login page template
+│   └── dashboard.html     # Dashboard template
+└── static/                # Static assets
+    ├── css/               # Stylesheets
+    │   ├── login.css      # Login page styles
+    │   └── dashboard.css  # Dashboard styles
+    ├── js/                # JavaScript files
+    │   ├── login.js       # Login functionality
+    │   └── dashboard.js   # Dashboard functionality
+    └── images/            # Images and icons
+        └── favicon.ico    # Site favicon
 ```
 
 ## 📦 Version Control & .gitignore
@@ -34,7 +34,7 @@ Smart-Security/
   - `requirements.txt`
   - `app.py`
   - `README.md`
-  - `vercel.json`
+  - `render.yaml`
   - `templates/`
   - `static/`
 - **Never commit or push your `venv` folder or test scripts.**
@@ -46,7 +46,7 @@ Smart-Security/
   ```
 - When adding files, use:
   ```bash
-  git add requirements.txt app.py README.md vercel.json templates static
+  git add requirements.txt app.py README.md render.yaml templates static
   ```
   (Do **not** use `git add .`)
 
@@ -72,40 +72,31 @@ Smart-Security/
    ```
 
 3. **Access the application**:
-   - Open http://localhost:5000
+   - Open http://localhost:10000
    - Use test credentials: `admin@test.com` / `admin123`
 
 ## 🌐 Deployment
 
-### Vercel Deployment
+### Render Deployment
 
-1. **Install Vercel CLI**:
+1. **Deploy to Render**:
+   - Connect your GitHub repository to Render
+   - Render will automatically detect the Python project
+   - Use the `render.yaml` configuration file for deployment settings
+
+2. **Manual Deployment**:
    ```bash
-   npm i -g vercel
-   ```
-
-2. **Deploy to Vercel**:
-   ```bash
-   vercel
-   ```
-
-3. **Set environment variables** (if needed):
-   - Go to Vercel dashboard
-   - Add any required environment variables
-
-### Manual Deployment
-
-1. **Push to GitHub**:
-   ```bash
-   git add requirements.txt app.py README.md vercel.json templates static
-   git commit -m "Initial commit"
+   git add requirements.txt app.py README.md render.yaml templates static
+   git commit -m "Deploy to Render"
    git push origin main
    ```
 
-2. **Connect to Vercel**:
-   - Import your GitHub repository
-   - Vercel will automatically detect the Python project
-   - Deploy with default settings
+3. **Environment Variables** (if needed):
+   - Go to Render dashboard
+   - Add any required environment variables in the service settings
+
+4. **Production WSGI Server**:
+   - The app uses `gunicorn` for production deployment (see `render.yaml`)
 
 ## 🔧 API Endpoints
 
@@ -139,7 +130,7 @@ Smart-Security/
 - **Backend**: Flask (Python)
 - **Frontend**: HTML5, CSS3, JavaScript (ES6+)
 - **Styling**: Custom CSS with responsive design
-- **Deployment**: Vercel
+- **Deployment**: Render (with gunicorn)
 - **API**: RESTful API with JSON responses
 
 ## 📱 Browser Support
