@@ -1,0 +1,19 @@
+# Ignore Python virtual environment and cache
+venv/
+__pycache__/
+
+# Ignore test scripts
+*test*.py
+
+test_*.py
+
+# Ignore everything except the main project files and folders
+# (requirements.txt, app.py, README.md, vercel.json, templates/, static/)
+# Uncomment the following if you want to ignore all files by default and then whitelist
+#/*
+#!requirements.txt
+#!app.py
+#!README.md
+#!vercel.json
+#!templates/
+#!static/ 
