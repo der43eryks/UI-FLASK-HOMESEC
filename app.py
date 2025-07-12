@@ -1,11 +1,45 @@
+import os
 from flask import Flask, request, jsonify, redirect, send_from_directory, render_template, Response
 import requests
 from flask_cors import CORS
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 app = Flask(__name__, static_url_path='/static')
 CORS(app, supports_credentials=True)
 
-API_BASE = 'https://homesecurity-cw0e.onrender.com'
+LOCAL_API = os.getenv('LOCAL_API_URL', 'http://localhost:4000')
+ONLINE_API = os.getenv('ONLINE_API_URL', 'https://homesecurity-cw0e.onrender.com')
+API_TIMEOUT = int(os.getenv('API_TIMEOUT', 2))
+
+
+def get_api_response(endpoint, method='GET', data=None, timeout=API_TIMEOUT):
+    """
+    Try local server first, then fallback to online server
+    Returns (response, server_used) tuple
+    """
+    servers = [
+        (LOCAL_API, 'local'),
+        (ONLINE_API, 'online')
+    ]
+    for server_url, server_name in servers:
+        try:
+            url = f'{server_url}{endpoint}'
+            if method == 'GET':
+                response = requests.get(url, timeout=timeout)
+            elif method == 'POST':
+                response = requests.post(url, json=data, timeout=timeout)
+            elif method == 'PUT':
+                response = requests.put(url, json=data, timeout=timeout)
+            if response is not None:
+                print(f"✅ Using {server_name} server for {endpoint}")
+                return response, server_name
+        except Exception as e:
+            print(f"❌ {server_name} server failed for {endpoint}: {str(e)}")
+            continue
+    return None, None
 
 # === Frontend Pages ===
 @app.route('/')
@@ -27,18 +61,16 @@ def serve_static(path):
 # === Health Check ===
 @app.route('/api/health', methods=['GET'])
 def health_check():
-    try:
-        response = requests.get(f'{API_BASE}/api/health')
+    response, server = get_api_response('/api/health', 'GET')
+    if response:
         return jsonify(response.json()), response.status_code
-    except Exception as e:
-        return jsonify({'message': str(e)}), 500
+    else:
+        return jsonify({'message': 'Both servers unavailable'}), 500
 
 # === Authentication ===
 @app.route('/api/auth/login', methods=['POST'])
 def auth_login():
     data = request.json
-
-    # ✅ Development-only test user
     if data['email'] == 'admin@test.com' and data['password'] == 'admin123':
         return jsonify({
             "message": "Login successful",
@@ -47,99 +79,95 @@ def auth_login():
                 "name": "Admin Tester"
             }
         }), 200
-
-    # 🔄 Otherwise, try real API
-    try:
-        response = requests.post(f'{API_BASE}/api/auth/login', json=data)
+    response, server = get_api_response('/api/auth/login', 'POST', data)
+    if response:
         return jsonify(response.json()), response.status_code
-    except Exception as e:
-        return jsonify({'message': str(e)}), 500
+    else:
+        return jsonify({'message': 'Both servers unavailable'}), 500
 
 @app.route('/api/auth/logout', methods=['POST'])
 def auth_logout():
-    try:
-        response = requests.post(f'{API_BASE}/api/auth/logout')
+    response, server = get_api_response('/api/auth/logout', 'POST')
+    if response:
         return jsonify(response.json()), response.status_code
-    except Exception as e:
-        return jsonify({'message': str(e)}), 500
+    else:
+        return jsonify({'message': 'Both servers unavailable'}), 500
 
 # === User Management ===
 @app.route('/api/users/me', methods=['GET'])
 def users_me():
-    try:
-        response = requests.get(f'{API_BASE}/api/users/me')
+    response, server = get_api_response('/api/users/me', 'GET')
+    if response:
         return jsonify(response.json()), response.status_code
-    except Exception as e:
-        return jsonify({'message': str(e)}), 500
+    else:
+        return jsonify({'message': 'Both servers unavailable'}), 500
 
 @app.route('/api/users/email', methods=['PUT'])
 def update_email():
-    try:
-        response = requests.put(f'{API_BASE}/api/users/email', json=request.json)
+    response, server = get_api_response('/api/users/email', 'PUT', request.json)
+    if response:
         return jsonify(response.json()), response.status_code
-    except Exception as e:
-        return jsonify({'message': str(e)}), 500
+    else:
+        return jsonify({'message': 'Both servers unavailable'}), 500
 
 @app.route('/api/users/phone', methods=['PUT'])
 def update_phone():
-    try:
-        response = requests.put(f'{API_BASE}/api/users/phone', json=request.json)
+    response, server = get_api_response('/api/users/phone', 'PUT', request.json)
+    if response:
         return jsonify(response.json()), response.status_code
-    except Exception as e:
-        return jsonify({'message': str(e)}), 500
+    else:
+        return jsonify({'message': 'Both servers unavailable'}), 500
 
 @app.route('/api/users/password', methods=['PUT'])
 def update_password():
-    try:
-        response = requests.put(f'{API_BASE}/api/users/password', json=request.json)
+    response, server = get_api_response('/api/users/password', 'PUT', request.json)
+    if response:
         return jsonify(response.json()), response.status_code
-    except Exception as e:
-        return jsonify({'message': str(e)}), 500
+    else:
+        return jsonify({'message': 'Both servers unavailable'}), 500
 
 # === Device Management ===
 @app.route('/api/devices/me', methods=['GET'])
 def devices_me():
-    try:
-        response = requests.get(f'{API_BASE}/api/devices/me')
+    response, server = get_api_response('/api/devices/me', 'GET')
+    if response:
         return jsonify(response.json()), response.status_code
-    except Exception as e:
-        return jsonify({'message': str(e)}), 500
+    else:
+        return jsonify({'message': 'Both servers unavailable'}), 500
 
 @app.route('/api/devices/status', methods=['GET'])
 def devices_status():
-    try:
-        response = requests.get(f'{API_BASE}/api/devices/status')
+    response, server = get_api_response('/api/devices/status', 'GET')
+    if response:
         return jsonify(response.json()), response.status_code
-    except Exception as e:
-        return jsonify({'message': str(e)}), 500
+    else:
+        return jsonify({'message': 'Both servers unavailable'}), 500
 
 # === Alerts ===
 @app.route('/api/alerts', methods=['GET'])
 def alerts():
-    try:
-        response = requests.get(f'{API_BASE}/api/alerts')
+    response, server = get_api_response('/api/alerts', 'GET')
+    if response:
         return jsonify(response.json()), response.status_code
-    except Exception as e:
-        return jsonify({'message': str(e)}), 500
+    else:
+        return jsonify({'message': 'Both servers unavailable'}), 500
 
 @app.route('/api/sse/alerts', methods=['GET'])
 def sse_alerts():
     def generate():
         try:
-            # Forward the request to the external API
-            response = requests.get(f'{API_BASE}/api/sse/alerts', stream=True)
-            
-            # Set proper SSE headers
-            yield f"data: {response.text}\n\n"
-            
-            # Stream the response
+            response = requests.get(f'{LOCAL_API}/api/sse/alerts', stream=True, timeout=API_TIMEOUT)
             for chunk in response.iter_content(chunk_size=1024):
                 if chunk:
                     yield f"data: {chunk.decode('utf-8')}\n\n"
-                    
-        except Exception as e:
-            yield f"data: {{\"error\": \"{str(e)}\"}}\n\n"
-    
+        except:
+            try:
+                response = requests.get(f'{ONLINE_API}/api/sse/alerts', stream=True)
+                for chunk in response.iter_content(chunk_size=1024):
+                    if chunk:
+                        yield f"data: {chunk.decode('utf-8')}\n\n"
+            except Exception as e:
+                yield f"data: {{\"error\": \"{str(e)}\"}}\n\n"
     return Response(
         generate(),
         mimetype='text/event-stream',
@@ -154,20 +182,20 @@ def sse_alerts():
 # === Password Resets ===
 @app.route('/api/password-resets/request', methods=['POST'])
 def password_reset_request():
-    try:
-        response = requests.post(f'{API_BASE}/api/password-resets/request', json=request.json)
+    response, server = get_api_response('/api/password-resets/request', 'POST', request.json)
+    if response:
         return jsonify(response.json()), response.status_code
-    except Exception as e:
-        return jsonify({'message': str(e)}), 500
+    else:
+        return jsonify({'message': 'Both servers unavailable'}), 500
 
 @app.route('/api/password-resets/reset', methods=['POST'])
 def password_reset_reset():
-    try:
-        response = requests.post(f'{API_BASE}/api/password-resets/reset', json=request.json)
+    response, server = get_api_response('/api/password-resets/reset', 'POST', request.json)
+    if response:
         return jsonify(response.json()), response.status_code
-    except Exception as e:
-        return jsonify({'message': str(e)}), 500
+    else:
+        return jsonify({'message': 'Both servers unavailable'}), 500
 
 # === Run the Server ===
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=int(os.getenv('FLASK_PORT', 5000)))
