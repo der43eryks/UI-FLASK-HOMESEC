@@ -34,8 +34,9 @@ def get_api_response(endpoint, method='GET', data=None, timeout=API_TIMEOUT):
             elif method == 'PUT':
                 response = requests.put(url, json=data, timeout=timeout)
             if response is not None:
-                print(f"✅ Using {server_name} server for {endpoint}")
-                return response, server_name
+                print(f"✅ Using {server_name} server for {endpoint} (status: {response.status_code})")
+                print(f"Response body: {response.text}")
+                return response, server_name  # Return any HTTP response, not just 200
         except Exception as e:
             print(f"❌ {server_name} server failed for {endpoint}: {str(e)}")
             continue
