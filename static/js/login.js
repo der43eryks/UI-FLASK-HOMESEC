@@ -34,7 +34,7 @@ document.getElementById('loginForm').addEventListener('submit', async function (
         const response = await fetch('/api/auth/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password, deviceId })
+            body: JSON.stringify({ email, password, device_id: deviceId })
         });
 
         const data = await response.json();
