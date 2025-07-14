@@ -37,8 +37,9 @@ def main():
     
     # Test data
     test_login_data = {
-        "email": "admin@test.com",
-        "password": "admin123"
+        "email": "test@gmail.com",
+        "password": "12345678",
+        "device_id" :"12345678"
     }
     
     test_user_data = {
