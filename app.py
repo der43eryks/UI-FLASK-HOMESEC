@@ -26,7 +26,7 @@ ONLINE_CLIENT_RENDER = os.getenv('ONLINE_CLIENT_RENDER')
 app.config['ONLINE_CLIENT_RENDER'] = ONLINE_CLIENT_RENDER
 
 # BACKEND/API URL (for all proxied API calls)
-ONLINE_API = os.getenv('ONLINE_API_URL', 'https://homesecurity-cw0e.onrender.com')
+ONLINE_API = os.getenv('ONLINE_API_URL'z, 'https://homesecurity-cw0e.onrender.com')
 LOCAL_API = os.getenv('LOCAL_API_URL', ONLINE_API)
 API_TIMEOUT = int(os.getenv('API_TIMEOUT', 2))
 
@@ -101,7 +101,7 @@ def health_check():
 # === Authentication ===
 @app.route('/api/auth/login', methods=['POST'])
 def proxy_login():
-    data = request.json
+    data = request.json or {}
     try:
         resp = requests.post(
             f"{ONLINE_API}/api/auth/login",
