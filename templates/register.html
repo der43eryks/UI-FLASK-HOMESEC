@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" href="/static/css/login.css">
+</head>
+<body>
+    <div class="container">
+        <form id="registerForm">
+            <h2>Register</h2>
+            <div class="input-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+                <span class="error" id="emailError"></span>
+            </div>
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" value="12345678" required readonly>
+                <span class="error" id="passwordError"></span>
+            </div>
+            <div class="input-group">
+                <label for="model">Model</label>
+                <input type="text" id="model" name="model" required>
+                <span class="error" id="modelError"></span>
+            </div>
+            <div class="input-group">
+                <label for="device_id">Device ID</label>
+                <input type="text" id="device_id" name="device_id" required>
+                <span class="error" id="deviceIdError"></span>
+            </div>
+            <div class="input-group">
+                <label for="phone">Phone (optional)</label>
+                <input type="text" id="phone" name="phone">
+                <span class="error" id="phoneError"></span>
+            </div>
+            <button type="submit">Register</button>
+            <span class="error" id="formError"></span>
+            <span class="success" id="formSuccess"></span>
+        </form>
+    </div>
+    <script src="/static/js/register.js"></script>
+</body>
+</html> 

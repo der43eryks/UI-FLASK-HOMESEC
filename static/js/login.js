@@ -36,14 +36,16 @@ document.getElementById('loginForm').addEventListener('submit', async function (
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password, device_id: deviceId })
         });
+    
 
         const data = await response.json();
 
         if (response.ok) {
             sessionStorage.setItem("userEmail", email);
+            //sessionStorage.setItem("deviceId", deviceId); // store email and device_id
             window.location.href = "/dashboard";
         } else {
-            if (data.error) {
+            if (data.error) {               
                 errorDiv.textContent = data.error;
             } else if (data.errors && Array.isArray(data.errors)) {
                 errorDiv.textContent = data.errors.map(e => e.msg || e.error || JSON.stringify(e)).join(', ');
@@ -61,3 +63,5 @@ document.getElementById('loginForm').addEventListener('submit', async function (
         loadingText.style.display = 'none';
     }
 }); 
+
+ 

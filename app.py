@@ -30,28 +30,24 @@ API_TIMEOUT = int(os.getenv('API_TIMEOUT', 2))
 
 def get_api_response(endpoint, method='GET', data=None, timeout=API_TIMEOUT):
     """
-    Try local server first, then fallback to online server
-    Returns (response, server_used) tuple
+    Send a request to the local backend API and return the response.
     """
-    servers = [
-        (LOCAL_API, 'local') #(ONLINE_API, 'online')
-    ]
-    for server_url, server_name in servers:
-        try:
-            url = f'{server_url}{endpoint}'
-            if method == 'GET':
-                response = requests.get(url, timeout=timeout)
-            elif method == 'POST':
-                response = requests.post(url, json=data, timeout=timeout)
-            elif method == 'PUT':
-                response = requests.put(url, json=data, timeout=timeout)
-            if response is not None:
-                print(f"✅ Using {server_name} server for {endpoint} (status: {response.status_code})")
-                print(f"Response body: {response.text}")
-                return response, server_name  # Return any HTTP response, not just 200
-        except Exception as e:
-            print(f"❌ {server_name} server failed for {endpoint}: {str(e)}")
-            continue
+    url = f'{LOCAL_API}{endpoint}'
+    try:
+        if method == 'GET':
+            response = requests.get(url, timeout=timeout)
+        elif method == 'POST':
+            response = requests.post(url, json=data, timeout=timeout)
+        elif method == 'PUT':
+            response = requests.put(url, json=data, timeout=timeout)
+        else:
+            raise ValueError(f"Unsupported HTTP method: {method}")
+        if response is not None:
+            print(f"✅ Using local server for {endpoint} (status: {response.status_code})")
+            print(f"Response body: {response.text}")
+            return response, 'local'  # Return any HTTP response, not just 200
+    except Exception as e:
+        print(f"❌ Local server failed for {endpoint}: {str(e)}")
     return None, None
 
 # === Session Management Helper ===
@@ -138,9 +134,11 @@ def check_session():
         return jsonify({
             "logged_in": True,
             "user_email": session.get('user_email', ''),
+            "device_id" : session.get('device_id', ''),
             "login_time": session.get('login_time', 0)
         }), 200
     else:
+        #print('401 error alwasys ')
         return jsonify({"logged_in": False}), 401
 
 # === User Management ===
@@ -150,7 +148,7 @@ def users_me():
     if response:
         return jsonify(response.json()), response.status_code
     else:
-        return jsonify({'error': 'Backend unavailable or error occurred'}), 500
+        return jsonify({'error': 'Failed to get user'}), 500
 
 @app.route('/api/users/profile', methods=['GET'])
 def proxy_user_profile():
@@ -214,7 +212,7 @@ def alerts():
     if response:
         return jsonify(response.json()), response.status_code
     else:
-        return jsonify({'error': 'Backend unavailable or error occurred'}), 500
+        return jsonify({'error': 'Failure to get alerts'}), 500
 
 @app.route('/api/sse/alerts', methods=['GET'])
 def proxy_sse_alerts():
