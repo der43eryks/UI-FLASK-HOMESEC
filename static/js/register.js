@@ -3,7 +3,8 @@ import {
   validateRegisterPassword,
   validateRegisterPhone,
   validateRegisterDeviceId,
-  validateRegisterModel
+  validateRegisterModel,
+  validateRegisterName
 } from './validation/registerValidations.js';
 
 function debounce(fn, delay) {
@@ -38,7 +39,8 @@ const MAX_LENGTHS = {
   password: 16,
   deviceId: 12,
   model: 30,
-  phone: 10
+  phone: 10,
+  name: 20
 };
 
 function enforceMaxLength(input, maxLength, errorMsg) {
@@ -57,12 +59,14 @@ document.addEventListener('DOMContentLoaded', function () {
     const modelInput = document.getElementById('model');
     const deviceIdInput = document.getElementById('device_id');
     const phoneInput = document.getElementById('phone');
+    const nameInput = document.getElementById('name');
 
     const emailError = document.getElementById('emailError');
     const passwordError = document.getElementById('passwordError');
     const modelError = document.getElementById('modelError');
     const deviceIdError = document.getElementById('deviceIdError');
     const phoneError = document.getElementById('phoneError');
+    const nameError = document.getElementById('nameError');
     const formError = document.getElementById('formError');
     const formSuccess = document.getElementById('formSuccess');
 
@@ -85,6 +89,7 @@ document.addEventListener('DOMContentLoaded', function () {
     attachValidation(modelInput, validateRegisterModel);
     attachValidation(deviceIdInput, validateRegisterDeviceId);
     attachValidation(phoneInput, validateRegisterPhone);
+    attachValidation(nameInput, validateRegisterName);
 
     // Enforce max length and show error
     enforceMaxLength(emailInput, MAX_LENGTHS.email, 'Email cannot exceed 50 characters.');
@@ -92,6 +97,7 @@ document.addEventListener('DOMContentLoaded', function () {
     enforceMaxLength(modelInput, MAX_LENGTHS.model, 'Model cannot exceed 30 characters.');
     enforceMaxLength(deviceIdInput, MAX_LENGTHS.deviceId, 'Device ID cannot exceed 12 digits.');
     enforceMaxLength(phoneInput, MAX_LENGTHS.phone, 'Phone cannot exceed 10 digits.');
+    enforceMaxLength(nameInput, MAX_LENGTHS.name, 'Device name cannot exceed 20 characters.');
 
     // Popup for success
     function showPopup(message, callback) {
@@ -130,6 +136,7 @@ document.addEventListener('DOMContentLoaded', function () {
         modelError.textContent = '';
         deviceIdError.textContent = '';
         phoneError.textContent = '';
+        nameError.textContent = '';
         formError.textContent = '';
         formSuccess.textContent = '';
 
@@ -138,6 +145,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const model = modelInput.value.trim();
         const device_id = deviceIdInput.value.trim();
         const phone = phoneInput.value.trim();
+        const name = nameInput.value.trim();
 
         let valid = true;
 
@@ -166,6 +174,11 @@ document.addEventListener('DOMContentLoaded', function () {
             showValidation(phoneInput, phoneValidation);
             valid = false;
         }
+        const nameValidation = validateRegisterName(name);
+        if (nameValidation) {
+            showValidation(nameInput, nameValidation);
+            valid = false;
+        }
         if (!valid) return;
 
         const payload = {
@@ -173,6 +186,7 @@ document.addEventListener('DOMContentLoaded', function () {
             password,
             model,
             device_id,
+            name,
         };
         if (phone) payload.phone = phone;
 

@@ -35,4 +35,12 @@ export function validateRegisterDeviceId(deviceId) {
 export function validateRegisterModel(model) {
     if (!model) return 'Model is required.';
     return '';
+}
+
+export function validateRegisterName(name) {
+    if (!name) return 'Device name is required.';
+    if (name.length > 20) return 'Device name cannot exceed 20 characters.';
+    if (!/^[a-zA-Z0-9 _-]+$/.test(name))
+        return 'Device name can only contain letters, numbers, spaces, - and _.';
+    return '';
 } 

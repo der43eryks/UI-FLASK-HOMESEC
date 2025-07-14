@@ -122,6 +122,59 @@ body {
     text-align: center;
 }
 
+.popup-success {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(44, 62, 80, 0.25);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+}
+.popup-success.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+.popup-content {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+    padding: 2rem 2.5rem;
+    text-align: center;
+    animation: fadeInUp 0.5s cubic-bezier(.39,.575,.565,1.000);
+}
+.popup-content h3 {
+    color: #27ae60;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+.popup-content p {
+    color: #2d3a4b;
+    font-size: 1.1rem;
+    margin-bottom: 1.2rem;
+}
+.popup-link {
+    display: inline-block;
+    padding: 0.7rem 2.2rem;
+    background: linear-gradient(90deg, #4f8cff 0%, #38b6ff 100%);
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 2px 8px 0 #4f8cff22;
+    text-decoration: none;
+    transition: background 0.2s, box-shadow 0.2s;
+}
+.popup-link:hover, .popup-link:focus {
+    background: linear-gradient(90deg, #38b6ff 0%, #4f8cff 100%);
+    box-shadow: 0 4px 16px 0 #4f8cff44;
+}
+
 @media (max-width: 500px) {
     .register-container {
         max-width: 95vw;
