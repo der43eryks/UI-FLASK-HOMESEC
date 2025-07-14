@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const loadingText = document.getElementById('loadingText');
 
     // Enforce max length and show error
-    enforceMaxLength(emailInput, MAX_LENGTHS.email, 'Email cannot exceed 50 characters.');
+    enforceMaxLength(emailInput, MAX_LENGTHS.email, 'Maximum number of characters reached, Max. 20');
     enforceMaxLength(passwordInput, MAX_LENGTHS.password, 'Password cannot exceed 16 digits.');
     enforceMaxLength(deviceIdInput, MAX_LENGTHS.deviceId, 'Device ID cannot exceed 12 digits.');
 
@@ -112,6 +112,7 @@ document.addEventListener('DOMContentLoaded', function () {
         loginError.textContent = '';
         loadingText.style.display = 'none';
 
+        // Always trim input values
         const email = emailInput.value.trim();
         const password = passwordInput.value;
         const device_id = deviceIdInput.value.trim();
@@ -138,10 +139,12 @@ document.addEventListener('DOMContentLoaded', function () {
         loadingText.style.display = 'block';
 
         try {
+            // Use credentials: 'include' for cookies/session support
             const res = await fetch('http://localhost:4000/api/auth/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password, device_id })
+                body: JSON.stringify({ email, password, device_id }),
+                credentials: 'include'
             });
             const data = await res.json();
             loadingText.style.display = 'none';

@@ -4,49 +4,14 @@ from flask import Flask, request, jsonify, redirect, send_from_directory, render
 import requests
 from flask_cors import CORS, cross_origin
 from dotenv  import load_dotenv
-import redis
 import logging
 from typing import Optional
 
 # Load environment variables
 load_dotenv()
 
-# Configure Redis connection
-r = redis.Redis(host='localhost', port=6379, db=0, decode_responses=True)
-
 # Configure logging
 logging.basicConfig(level=logging.INFO, filename='login_attempts.log')
-
-RATE_LIMIT = int(os.getenv('LOGIN_RATE_LIMIT', 5))
-RATE_WINDOW = int(os.getenv('LOGIN_RATE_WINDOW', 900))  # 15 minutes in seconds
-
-def get_rate_limit_key(email: str, ip: str) -> str:
-    return f"rate_limit:{email}:{ip}"
-
-def is_rate_limited(email: str, ip: str) -> tuple[bool, int]:
-    key = get_rate_limit_key(email, ip)
-    attempts_str = r.get(key)
-    ttl = r.ttl(key) or RATE_WINDOW
-
-    try:
-        attempts = int(attempts_str) if attempts_str is not None else 0
-    except ValueError:
-        attempts = 0
-
-    if attempts >= RATE_LIMIT:
-        return True, ttl
-    return False, ttl
-
-def increment_attempt(email: str, ip: str) -> None:
-    key = get_rate_limit_key(email, ip)
-    if r.exists(key):
-        r.incr(key)
-    else:
-        r.set(key, 1, ex=RATE_WINDOW)
-
-def reset_attempts(email: str, ip: str) -> None:
-    key = get_rate_limit_key(email, ip)
-    r.delete(key)
 
 app = Flask(__name__, static_url_path='/static')
 CORS(app, supports_credentials=True)
@@ -132,18 +97,6 @@ def serve_static(path):
 @app.route('/api/auth/login', methods=['POST'])
 def proxy_login():
     data = request.json or {}
-    email = data.get('email', '').strip()
-    ip = request.remote_addr
-
-    # Rate limiting check
-    limited, retry_after = is_rate_limited(email, ip)
-    if limited:
-        logging.warning(f"Rate limit hit for {email} from {ip}")
-        resp = jsonify({'error': 'Login attempts reached, please try again later.'})
-        resp.status_code = 429
-        resp.headers['Retry-After'] = str(retry_after if retry_after > 0 else RATE_WINDOW)
-        return resp
-
     try:
         resp = requests.post(
             f"{LOCAL_API}/api/auth/login", 
@@ -152,7 +105,6 @@ def proxy_login():
             cookies=request.cookies
         )
         if resp.status_code == 200:
-            reset_attempts(email, ip)
             # Store user session data securely
             session['logged_in'] = True
             session['user_email'] = data.get('email', '')
@@ -160,8 +112,7 @@ def proxy_login():
             session['login_time'] = int(time.time())
             return jsonify({"success": True, "message": "Login successful"}), 200
         else:
-            increment_attempt(email, ip)
-            logging.info(f"Failed login for {email} from {ip}")
+            logging.info(f"Failed login for {data.get('email', '')} from {request.remote_addr}")
             return jsonify({"success": False, "error": resp.json().get("error", "Login failed")}), resp.status_code
     except Exception as e:
         return jsonify({"success": False, "error": "An error occurred while logging in."}), 500
