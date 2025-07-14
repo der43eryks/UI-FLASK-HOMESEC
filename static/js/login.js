@@ -4,6 +4,14 @@ import {
   validateLoginDeviceId
 } from './validation/LoginValidations.js';
 
+function debounce(fn, delay) {
+  let timer;
+  return function (...args) {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn.apply(this, args), delay);
+  };
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('loginForm');
     const emailInput = document.getElementById('email');
@@ -11,6 +19,66 @@ document.addEventListener('DOMContentLoaded', function () {
     const deviceIdInput = document.getElementById('deviceId');
     const loginError = document.getElementById('loginError');
     const loadingText = document.getElementById('loadingText');
+
+    // Debounced validation handlers
+    emailInput.addEventListener('input', debounce(function () {
+        loginError.textContent = '';
+        const msg = validateLoginEmail(emailInput.value.trim());
+        if (msg) loginError.textContent = msg;
+    }, 300));
+    emailInput.addEventListener('blur', function () {
+        const msg = validateLoginEmail(emailInput.value.trim());
+        loginError.textContent = msg;
+    });
+
+    passwordInput.addEventListener('input', debounce(function () {
+        loginError.textContent = '';
+        const msg = validateLoginPassword(passwordInput.value);
+        if (msg) loginError.textContent = msg;
+    }, 300));
+    passwordInput.addEventListener('blur', function () {
+        const msg = validateLoginPassword(passwordInput.value);
+        loginError.textContent = msg;
+    });
+
+    deviceIdInput.addEventListener('input', debounce(function () {
+        loginError.textContent = '';
+        const msg = validateLoginDeviceId(deviceIdInput.value.trim());
+        if (msg) loginError.textContent = msg;
+    }, 300));
+    deviceIdInput.addEventListener('blur', function () {
+        const msg = validateLoginDeviceId(deviceIdInput.value.trim());
+        loginError.textContent = msg;
+    });
+
+    // Popup for success
+    function showPopup(message, callback) {
+        let popup = document.createElement('div');
+        popup.className = 'popup-success';
+        popup.innerHTML = `<div class="popup-content">
+            <h3>Login successful</h3>
+            <p>${message}</p>
+            <a href="/dashboard" class="popup-link" style="display:none;opacity:0;transition:opacity 0.4s;">Go to Dashboard</a>
+        </div>`;
+        document.body.appendChild(popup);
+        setTimeout(() => {
+            popup.classList.add('show');
+            setTimeout(() => {
+                const btn = popup.querySelector('.popup-link');
+                btn.style.display = 'inline-block';
+                setTimeout(() => { btn.style.opacity = 1; }, 10);
+            }, 1200);
+        }, 10);
+        popup.querySelector('.popup-link').onclick = function(e) {
+            e.preventDefault();
+            popup.classList.remove('show');
+            setTimeout(() => {
+                document.body.removeChild(popup);
+                if (callback) callback();
+            }, 300);
+            window.location.href = '/dashboard';
+        };
+    }
 
     form.addEventListener('submit', async function (e) {
         e.preventDefault();
@@ -23,27 +91,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
         let valid = true;
 
-        // Validate email
         const emailValidation = validateLoginEmail(email);
         if (emailValidation) {
             loginError.textContent = emailValidation;
             valid = false;
         }
-
-        // Validate password
         const passwordValidation = validateLoginPassword(password);
         if (passwordValidation) {
             loginError.textContent = passwordValidation;
             valid = false;
         }
-
-        // Validate device_id
         const deviceIdValidation = validateLoginDeviceId(device_id);
         if (deviceIdValidation) {
             loginError.textContent = deviceIdValidation;
             valid = false;
         }
-
         if (!valid) return;
 
         loadingText.style.display = 'block';
@@ -59,7 +121,9 @@ document.addEventListener('DOMContentLoaded', function () {
             if (res.ok && data.success) {
                 sessionStorage.setItem('userEmail', email);
                 sessionStorage.setItem('deviceId', device_id);
-                window.location.href = '/dashboard';
+                showPopup('You have logged in successfully!', () => {
+                    window.location.href = '/dashboard';
+                });
             } else {
                 loginError.textContent = data.error || 'Login failed. Please check your credentials.';
             }
