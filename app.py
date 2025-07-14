@@ -21,13 +21,10 @@ app.config.update(
     PERMANENT_SESSION_LIFETIME=3600  # Session lifetime in seconds
 )
 
-# FRONTEND/UI URL (for reference, not for API calls)
-ONLINE_CLIENT_RENDER = os.getenv('ONLINE_CLIENT_RENDER')
-app.config['ONLINE_CLIENT_RENDER'] = ONLINE_CLIENT_RENDER
 
-# BACKEND/API URL (for all proxied API calls)
-ONLINE_API = os.getenv('ONLINE_API_URL', 'https://homesecurity-cw0e.onrender.com')
-LOCAL_API = os.getenv('LOCAL_API_URL', ONLINE_API)
+#BACKEND/API URL (for all proxied API calls)
+#ONLINE_API = os.getenv('ONLINE_API_URL','LOCAL_API = os.getenv('LOCAL_API_URL', ONLINE_API)
+LOCAL_API = os.getenv('BACKEND_URL')
 API_TIMEOUT = int(os.getenv('API_TIMEOUT', 2))
 
 
@@ -37,8 +34,7 @@ def get_api_response(endpoint, method='GET', data=None, timeout=API_TIMEOUT):
     Returns (response, server_used) tuple
     """
     servers = [
-        (LOCAL_API, 'local'),
-        (ONLINE_API, 'online')
+        (LOCAL_API, 'local') #(ONLINE_API, 'online')
     ]
     for server_url, server_name in servers:
         try:
@@ -104,7 +100,7 @@ def proxy_login():
     data = request.json or {}
     try:
         resp = requests.post(
-            f"{ONLINE_API}/api/auth/login",
+            f"{LOCAL_API}/api/auth/login", 
             json=data,
             headers={"Content-Type": "application/json"},
             cookies=request.cookies
@@ -112,7 +108,8 @@ def proxy_login():
         if resp.status_code == 200:
             # Store user session data securely
             session['logged_in'] = True
-            session['user_email'] = data.get('email', '')
+            session['user_email'] = data.get('email', '') # data.get('email', '')
+            session['device_id'] = data.get('device_id', '') #try fill the whole cookie with the expected json data
             session['login_time'] = int(time.time())
             
             return jsonify({"success": True, "message": "Login successful"}), 200
@@ -159,7 +156,7 @@ def users_me():
 def proxy_user_profile():
     try:
         resp = requests.get(
-            f"{ONLINE_API}/api/users/profile",
+            f"{LOCAL_API}/api/users/profile",
             cookies=request.cookies
         )
         if resp.status_code == 200:
@@ -222,7 +219,7 @@ def alerts():
 @app.route('/api/sse/alerts', methods=['GET'])
 def proxy_sse_alerts():
     def generate():
-        backend_url = f"{ONLINE_API}/api/sse/alerts"
+        backend_url = f"{LOCAL_API}/api/sse/alerts"
         headers = {"Accept": "text/event-stream"}
         while True:
             try:
@@ -265,10 +262,10 @@ def password_reset_reset():
     else:
         return jsonify({'error': 'Backend unavailable or error occurred'}), 500
 
-# Make ONLINE_CLIENT_RENDER available in all templates
-@app.context_processor
-def inject_online_client_render():
-    return dict(ONLINE_CLIENT_RENDER=ONLINE_CLIENT_RENDER)
+# # Make ONLINE_CLIENT_RENDER available in all templates
+# @app.context_processor
+# def inject_online_client_render():
+#     return dict(ONLINE_CLIENT_RENDER=ONLINE_CLIENT_RENDER)
 
 # === Run the Server ===
 if __name__ == '__main__':
