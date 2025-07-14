@@ -1,33 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login - Home Security App</title>
-  <link rel="icon" href="/static/images/image.jpg" />
+  <link rel="icon" href="/static/images/lock.svg" />
   <link rel="stylesheet" href="/static/css/login.css" />
 </head>
-
 <body>
-  <div class="login-box">
-    <h2>Login</h2>
-    <form id="loginForm">
-      <label for="email">Email</label>
-      <input type="email" id="email" placeholder="Email" required />
-      <label for="password">Password</label>
-      <input type="password" id="password" placeholder="Password" required />
-      <label for="deviceId">Device ID</label>
-      <input type="text" id="deviceId" placeholder="Device ID" required />
-      <button type="submit" id="loginButton">Login</button>
+  <div class="login-bg"></div>
+  <div class="login-container">
+    <form id="loginForm" class="login-form">
+      <div class="login-heading">
+        <img src="/static/images/lock.svg" alt="Lock Icon" class="login-icon">
+        <h2>Welcome Back</h2>
+      </div>
+      <div class="input-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="Enter your email address" required />
+      </div>
+      <div class="input-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="Enter your password" required />
+      </div>
+      <div class="input-group">
+        <label for="deviceId">Device ID</label>
+        <input type="text" id="deviceId" name="deviceId" placeholder="Enter your device ID" required />
+      </div>
+      <button type="submit" id="loginButton" class="login-btn">Login</button>
       <div class="loading" id="loadingText">Logging in...</div>
+      <div class="error" id="loginError"></div>
     </form>
     <div class="register-link">
       <p>Don't have an account? <a href="/register">Register here</a></p>
     </div>
   </div>
-
   <script src="/static/js/login.js"></script>
 </body>
-
 </html> 
