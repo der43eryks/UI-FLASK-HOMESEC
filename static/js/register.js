@@ -19,18 +19,6 @@ document.addEventListener('DOMContentLoaded', function () {
         return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email);
     }
 
-    async function isEmailRegistered(email) {
-        // Try to check if email is registered (assumes backend endpoint exists)
-        try {
-            const res = await fetch(`http://localhost:4000/api/users/check-email?email=${encodeURIComponent(email)}`);
-            if (res.ok) {
-                const data = await res.json();
-                return data.exists === true;
-            }
-        } catch (e) {}
-        return false; // If check fails, allow registration to proceed
-    }
-
     form.addEventListener('submit', async function (e) {
         e.preventDefault();
         // Clear errors
@@ -57,9 +45,6 @@ document.addEventListener('DOMContentLoaded', function () {
             valid = false;
         } else if (!validateEmail(email)) {
             emailError.textContent = 'Invalid email format.';
-            valid = false;
-        } else if (await isEmailRegistered(email)) {
-            emailError.textContent = 'Email is already registered.';
             valid = false;
         }
 
