@@ -77,6 +77,10 @@ def login_page():
 def dashboard_page():
     return render_template('dashboard.html')
 
+@app.route('/register')
+def register_page():
+    return render_template('register.html')
+
 @app.route('/static/<path:path>')
 def serve_static(path):
     return send_from_directory('static', path)

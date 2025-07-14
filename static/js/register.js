@@ -101,9 +101,12 @@ document.addEventListener('DOMContentLoaded', function () {
             });
             const data = await res.json();
             if (res.ok && data.message === 'Registration successful') {
-                formSuccess.textContent = 'Registration successful! You can now log in.';
+                formSuccess.textContent = 'Registration successful! Redirecting to login...';
                 form.reset();
                 passwordInput.value = '12345678';
+                setTimeout(() => {
+                    window.location.href = '/login';
+                }, 1500);
             } else {
                 formError.textContent = data.error || (data.errors ? data.errors.join(', ') : 'Registration failed.');
             }
