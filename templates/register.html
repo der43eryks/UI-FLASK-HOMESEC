@@ -3,39 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
-    <link rel="stylesheet" href="/static/css/login.css">
+    <title>Register - Home Security App</title>
+    <link rel="stylesheet" href="/static/css/register.css">
 </head>
 <body>
-    <div class="container">
-        <form id="registerForm">
-            <h2>Register</h2>
+    <div class="register-bg"></div>
+    <div class="register-container">
+        <form id="registerForm" class="register-form">
+            <div class="register-heading">
+                <img src="/static/images/lock.svg" alt="Lock Icon" class="register-icon">
+                <h2>Sign Up for Home Security</h2>
+            </div>
             <div class="input-group">
                 <label for="email">Email</label>
-                <input type="email" id="email" name="email" required>
+                <input type="email" id="email" name="email" placeholder="Enter your email address" required>
                 <span class="error" id="emailError"></span>
             </div>
             <div class="input-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" name="password" value="12345678" required readonly>
+                <input type="password" id="password" name="password" value="12345678" required readonly placeholder="Default: 12345678">
                 <span class="error" id="passwordError"></span>
             </div>
             <div class="input-group">
                 <label for="model">Model</label>
-                <input type="text" id="model" name="model" required>
+                <input type="text" id="model" name="model" placeholder="Device model (e.g., HS-100)" required>
                 <span class="error" id="modelError"></span>
             </div>
             <div class="input-group">
                 <label for="device_id">Device ID</label>
-                <input type="text" id="device_id" name="device_id" required>
+                <input type="text" id="device_id" name="device_id" placeholder="Enter your device ID" required>
                 <span class="error" id="deviceIdError"></span>
             </div>
             <div class="input-group">
                 <label for="phone">Phone (optional)</label>
-                <input type="text" id="phone" name="phone">
+                <input type="text" id="phone" name="phone" placeholder="Phone number (optional)">
                 <span class="error" id="phoneError"></span>
             </div>
-            <button type="submit">Register</button>
+            <button type="submit" class="register-btn">Register</button>
             <span class="error" id="formError"></span>
             <span class="success" id="formSuccess"></span>
         </form>
