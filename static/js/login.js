@@ -31,6 +31,21 @@ function showSuccess(input) {
   input.classList.remove('input-error');
 }
 
+const MAX_LENGTHS = {
+  email: 50,
+  password: 16,
+  deviceId: 12
+};
+
+function enforceMaxLength(input, maxLength, errorMsg) {
+  input.addEventListener('input', function (e) {
+    if (input.value.length > maxLength) {
+      input.value = input.value.slice(0, maxLength);
+      showValidation(input, errorMsg);
+    }
+  });
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('loginForm');
     const emailInput = document.getElementById('email');
@@ -38,6 +53,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const deviceIdInput = document.getElementById('deviceId');
     const loginError = document.getElementById('loginError');
     const loadingText = document.getElementById('loadingText');
+
+    // Enforce max length and show error
+    enforceMaxLength(emailInput, MAX_LENGTHS.email, 'Email cannot exceed 50 characters.');
+    enforceMaxLength(passwordInput, MAX_LENGTHS.password, 'Password cannot exceed 16 digits.');
+    enforceMaxLength(deviceIdInput, MAX_LENGTHS.deviceId, 'Device ID cannot exceed 12 digits.');
 
     // Debounced validation handlers with per-field feedback
     function attachValidation(input, validateFn) {

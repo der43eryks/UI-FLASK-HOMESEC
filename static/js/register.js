@@ -33,6 +33,23 @@ function showSuccess(input) {
   input.classList.remove('input-error');
 }
 
+const MAX_LENGTHS = {
+  email: 50,
+  password: 16,
+  deviceId: 12,
+  model: 30,
+  phone: 10
+};
+
+function enforceMaxLength(input, maxLength, errorMsg) {
+  input.addEventListener('input', function (e) {
+    if (input.value.length > maxLength) {
+      input.value = input.value.slice(0, maxLength);
+      showValidation(input, errorMsg);
+    }
+  });
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('registerForm');
     const emailInput = document.getElementById('email');
@@ -68,6 +85,13 @@ document.addEventListener('DOMContentLoaded', function () {
     attachValidation(modelInput, validateRegisterModel);
     attachValidation(deviceIdInput, validateRegisterDeviceId);
     attachValidation(phoneInput, validateRegisterPhone);
+
+    // Enforce max length and show error
+    enforceMaxLength(emailInput, MAX_LENGTHS.email, 'Email cannot exceed 50 characters.');
+    enforceMaxLength(passwordInput, MAX_LENGTHS.password, 'Password cannot exceed 16 digits.');
+    enforceMaxLength(modelInput, MAX_LENGTHS.model, 'Model cannot exceed 30 characters.');
+    enforceMaxLength(deviceIdInput, MAX_LENGTHS.deviceId, 'Device ID cannot exceed 12 digits.');
+    enforceMaxLength(phoneInput, MAX_LENGTHS.phone, 'Phone cannot exceed 10 digits.');
 
     // Popup for success
     function showPopup(message, callback) {
