@@ -14,6 +14,25 @@ function debounce(fn, delay) {
   };
 }
 
+function showValidation(input, message) {
+  let msgElem = input.nextElementSibling;
+  if (!msgElem || !msgElem.classList.contains('validation-msg')) {
+    msgElem = document.createElement('div');
+    msgElem.className = 'validation-msg';
+    input.parentNode.insertBefore(msgElem, input.nextSibling);
+  }
+  msgElem.textContent = message;
+  msgElem.style.color = message ? '#e74c3c' : '#27ae60';
+  input.classList.toggle('input-error', !!message);
+  input.classList.toggle('input-success', !message);
+}
+
+function showSuccess(input) {
+  showValidation(input, '');
+  input.classList.add('input-success');
+  input.classList.remove('input-error');
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('registerForm');
     const emailInput = document.getElementById('email');
@@ -30,56 +49,25 @@ document.addEventListener('DOMContentLoaded', function () {
     const formError = document.getElementById('formError');
     const formSuccess = document.getElementById('formSuccess');
 
-    // Debounced validation handlers
-    emailInput.addEventListener('input', debounce(function () {
-        emailError.textContent = '';
-        const msg = validateRegisterEmail(emailInput.value.trim());
-        if (msg) emailError.textContent = msg;
-    }, 300));
-    emailInput.addEventListener('blur', function () {
-        const msg = validateRegisterEmail(emailInput.value.trim());
-        emailError.textContent = msg;
-    });
+    function attachValidation(input, validateFn) {
+      const debounced = debounce(() => {
+        const error = validateFn(input.value.trim());
+        if (error) showValidation(input, error);
+        else showSuccess(input);
+      }, 300);
+      input.addEventListener('input', debounced);
+      input.addEventListener('blur', () => {
+        const error = validateFn(input.value.trim());
+        if (error) showValidation(input, error);
+        else showSuccess(input);
+      });
+    }
 
-    passwordInput.addEventListener('input', debounce(function () {
-        passwordError.textContent = '';
-        const msg = validateRegisterPassword(passwordInput.value);
-        if (msg) passwordError.textContent = msg;
-    }, 300));
-    passwordInput.addEventListener('blur', function () {
-        const msg = validateRegisterPassword(passwordInput.value);
-        passwordError.textContent = msg;
-    });
-
-    modelInput.addEventListener('input', debounce(function () {
-        modelError.textContent = '';
-        const msg = validateRegisterModel(modelInput.value.trim());
-        if (msg) modelError.textContent = msg;
-    }, 300));
-    modelInput.addEventListener('blur', function () {
-        const msg = validateRegisterModel(modelInput.value.trim());
-        modelError.textContent = msg;
-    });
-
-    deviceIdInput.addEventListener('input', debounce(function () {
-        deviceIdError.textContent = '';
-        const msg = validateRegisterDeviceId(deviceIdInput.value.trim());
-        if (msg) deviceIdError.textContent = msg;
-    }, 300));
-    deviceIdInput.addEventListener('blur', function () {
-        const msg = validateRegisterDeviceId(deviceIdInput.value.trim());
-        deviceIdError.textContent = msg;
-    });
-
-    phoneInput.addEventListener('input', debounce(function () {
-        phoneError.textContent = '';
-        const msg = validateRegisterPhone(phoneInput.value.trim());
-        if (msg) phoneError.textContent = msg;
-    }, 300));
-    phoneInput.addEventListener('blur', function () {
-        const msg = validateRegisterPhone(phoneInput.value.trim());
-        phoneError.textContent = msg;
-    });
+    attachValidation(emailInput, validateRegisterEmail);
+    attachValidation(passwordInput, validateRegisterPassword);
+    attachValidation(modelInput, validateRegisterModel);
+    attachValidation(deviceIdInput, validateRegisterDeviceId);
+    attachValidation(phoneInput, validateRegisterPhone);
 
     // Popup for success
     function showPopup(message, callback) {
@@ -131,27 +119,27 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const emailValidation = validateRegisterEmail(email);
         if (emailValidation) {
-            emailError.textContent = emailValidation;
+            showValidation(emailInput, emailValidation);
             valid = false;
         }
         const passwordValidation = validateRegisterPassword(password);
         if (passwordValidation) {
-            passwordError.textContent = passwordValidation;
+            showValidation(passwordInput, passwordValidation);
             valid = false;
         }
         const modelValidation = validateRegisterModel(model);
         if (modelValidation) {
-            modelError.textContent = modelValidation;
+            showValidation(modelInput, modelValidation);
             valid = false;
         }
         const deviceIdValidation = validateRegisterDeviceId(device_id);
         if (deviceIdValidation) {
-            deviceIdError.textContent = deviceIdValidation;
+            showValidation(deviceIdInput, deviceIdValidation);
             valid = false;
         }
         const phoneValidation = validateRegisterPhone(phone);
         if (phoneValidation) {
-            phoneError.textContent = phoneValidation;
+            showValidation(phoneInput, phoneValidation);
             valid = false;
         }
         if (!valid) return;

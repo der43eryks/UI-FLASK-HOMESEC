@@ -193,6 +193,25 @@ body {
     box-shadow: 0 4px 16px 0 #4f8cff44;
 }
 
+/* Validation feedback styles */
+.input-error {
+    border-color: #e74c3c !important;
+    background: #fff6f6;
+}
+.input-success {
+    border-color: #27ae60 !important;
+    background: #f6fff8;
+}
+.validation-msg {
+    font-size: 0.92rem;
+    margin-top: 0.2rem;
+    min-height: 1.1em;
+    color: #e74c3c;
+    transition: color 0.2s;
+    text-align: left;
+    padding-left: 2px;
+}
+
 @media (max-width: 500px) {
     .login-container {
         max-width: 95vw;

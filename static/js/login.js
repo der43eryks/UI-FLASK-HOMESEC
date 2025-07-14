@@ -12,6 +12,25 @@ function debounce(fn, delay) {
   };
 }
 
+function showValidation(input, message) {
+  let msgElem = input.nextElementSibling;
+  if (!msgElem || !msgElem.classList.contains('validation-msg')) {
+    msgElem = document.createElement('div');
+    msgElem.className = 'validation-msg';
+    input.parentNode.insertBefore(msgElem, input.nextSibling);
+  }
+  msgElem.textContent = message;
+  msgElem.style.color = message ? '#e74c3c' : '#27ae60';
+  input.classList.toggle('input-error', !!message);
+  input.classList.toggle('input-success', !message);
+}
+
+function showSuccess(input) {
+  showValidation(input, '');
+  input.classList.add('input-success');
+  input.classList.remove('input-error');
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('loginForm');
     const emailInput = document.getElementById('email');
@@ -20,36 +39,24 @@ document.addEventListener('DOMContentLoaded', function () {
     const loginError = document.getElementById('loginError');
     const loadingText = document.getElementById('loadingText');
 
-    // Debounced validation handlers
-    emailInput.addEventListener('input', debounce(function () {
-        loginError.textContent = '';
-        const msg = validateLoginEmail(emailInput.value.trim());
-        if (msg) loginError.textContent = msg;
-    }, 300));
-    emailInput.addEventListener('blur', function () {
-        const msg = validateLoginEmail(emailInput.value.trim());
-        loginError.textContent = msg;
-    });
+    // Debounced validation handlers with per-field feedback
+    function attachValidation(input, validateFn) {
+      const debounced = debounce(() => {
+        const error = validateFn(input.value.trim());
+        if (error) showValidation(input, error);
+        else showSuccess(input);
+      }, 300);
+      input.addEventListener('input', debounced);
+      input.addEventListener('blur', () => {
+        const error = validateFn(input.value.trim());
+        if (error) showValidation(input, error);
+        else showSuccess(input);
+      });
+    }
 
-    passwordInput.addEventListener('input', debounce(function () {
-        loginError.textContent = '';
-        const msg = validateLoginPassword(passwordInput.value);
-        if (msg) loginError.textContent = msg;
-    }, 300));
-    passwordInput.addEventListener('blur', function () {
-        const msg = validateLoginPassword(passwordInput.value);
-        loginError.textContent = msg;
-    });
-
-    deviceIdInput.addEventListener('input', debounce(function () {
-        loginError.textContent = '';
-        const msg = validateLoginDeviceId(deviceIdInput.value.trim());
-        if (msg) loginError.textContent = msg;
-    }, 300));
-    deviceIdInput.addEventListener('blur', function () {
-        const msg = validateLoginDeviceId(deviceIdInput.value.trim());
-        loginError.textContent = msg;
-    });
+    attachValidation(emailInput, validateLoginEmail);
+    attachValidation(passwordInput, validateLoginPassword);
+    attachValidation(deviceIdInput, validateLoginDeviceId);
 
     // Popup for success
     function showPopup(message, callback) {
@@ -93,17 +100,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const emailValidation = validateLoginEmail(email);
         if (emailValidation) {
-            loginError.textContent = emailValidation;
+            showValidation(emailInput, emailValidation);
             valid = false;
         }
         const passwordValidation = validateLoginPassword(password);
         if (passwordValidation) {
-            loginError.textContent = passwordValidation;
+            showValidation(passwordInput, passwordValidation);
             valid = false;
         }
         const deviceIdValidation = validateLoginDeviceId(device_id);
         if (deviceIdValidation) {
-            loginError.textContent = deviceIdValidation;
+            showValidation(deviceIdInput, deviceIdValidation);
             valid = false;
         }
         if (!valid) return;
