@@ -191,10 +191,12 @@ document.addEventListener('DOMContentLoaded', function () {
         if (phone) payload.phone = phone;
 
         try {
+            // Use credentials: 'include' for cookies/session support
             const res = await fetch('http://localhost:4000/api/auth/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
+                body: JSON.stringify(payload),
+                credentials: 'include'
             });
             const data = await res.json();
             if (res.ok && data.message === 'Registration successful') {
