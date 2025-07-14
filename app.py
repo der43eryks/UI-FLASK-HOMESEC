@@ -86,13 +86,7 @@ def serve_static(path):
     return send_from_directory('static', path)
 
 # === Health Check ===
-@app.route('/api/health', methods=['GET'])
-def health_check():
-    response, server = get_api_response('/api/health', 'GET')
-    if response:
-        return jsonify(response.json()), response.status_code
-    else:
-        return jsonify({'error': 'Backend unavailable or error occurred'}), 500
+# Removed: /api/health
 
 # === Authentication ===
 @app.route('/api/auth/login', methods=['POST'])
@@ -131,19 +125,7 @@ def auth_logout():
         return jsonify({'error': 'Backend unavailable or error occurred'}), 500
 
 # === Session Check ===
-@app.route('/api/auth/session', methods=['GET'])
-def check_session():
-    """Check if user session is valid"""
-    if is_user_logged_in():
-        return jsonify({
-            "logged_in": True,
-            "user_email": session.get('user_email', ''),
-            "device_id" : session.get('device_id', ''),
-            "login_time": session.get('login_time', 0)
-        }), 200
-    else:
-        #print('401 error alwasys ')
-        return jsonify({"logged_in": False}), 401
+# Removed: /api/auth/session
 
 # === User Management ===
 @app.route('/api/users/me', methods=['GET'])
@@ -155,18 +137,7 @@ def users_me():
         return jsonify({'error': 'Failed to get user'}), 500
 
 @app.route('/api/users/profile', methods=['GET'])
-def proxy_user_profile():
-    try:
-        resp = requests.get(
-            f"{LOCAL_API}/api/users/profile",
-            cookies=request.cookies
-        )
-        if resp.status_code == 200:
-            return jsonify(resp.json()), 200
-        else:
-            return jsonify({"error": resp.json().get("error", "Failed to retrieve user profile")}), resp.status_code
-    except Exception as e:
-        return jsonify({"error": "An error occurred while retrieving user profile."}), 500
+# Removed: /api/users/profile
 
 @app.route('/api/users/email', methods=['PUT'])
 def update_email():
