@@ -1,3 +1,11 @@
+import {
+  validateRegisterEmail,
+  validateRegisterPassword,
+  validateRegisterPhone,
+  validateRegisterDeviceId,
+  validateRegisterModel
+} from './validation/registerValidations.js';
+
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('registerForm');
     const emailInput = document.getElementById('email');
@@ -32,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Get values
         const email = emailInput.value.trim();
-        const password = passwordInput.value; // always '12345678'
+        const password = passwordInput.value;
         const model = modelInput.value.trim();
         const device_id = deviceIdInput.value.trim();
         const phone = phoneInput.value.trim();
@@ -40,29 +48,37 @@ document.addEventListener('DOMContentLoaded', function () {
         let valid = true;
 
         // Validate email
-        if (!email) {
-            emailError.textContent = 'Email is required.';
+        const emailValidation = validateRegisterEmail(email);
+        if (emailValidation) {
+            emailError.textContent = emailValidation;
             valid = false;
-        } else if (!validateEmail(email)) {
-            emailError.textContent = 'Invalid email format.';
+        }
+
+        // Validate password
+        const passwordValidation = validateRegisterPassword(password);
+        if (passwordValidation) {
+            passwordError.textContent = passwordValidation;
             valid = false;
         }
 
         // Validate model
-        if (!model) {
-            modelError.textContent = 'Model is required.';
+        const modelValidation = validateRegisterModel(model);
+        if (modelValidation) {
+            modelError.textContent = modelValidation;
             valid = false;
         }
 
         // Validate device_id
-        if (!device_id) {
-            deviceIdError.textContent = 'Device ID is required.';
+        const deviceIdValidation = validateRegisterDeviceId(device_id);
+        if (deviceIdValidation) {
+            deviceIdError.textContent = deviceIdValidation;
             valid = false;
         }
 
-        // Optionally validate phone (e.g., length or format)
-        if (phone && !/^\+?\d{7,15}$/.test(phone)) {
-            phoneError.textContent = 'Invalid phone number.';
+        // Validate phone
+        const phoneValidation = validateRegisterPhone(phone);
+        if (phoneValidation) {
+            phoneError.textContent = phoneValidation;
             valid = false;
         }
 
