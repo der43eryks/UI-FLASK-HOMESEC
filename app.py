@@ -2,7 +2,7 @@ import os
 import time
 from flask import Flask, request, jsonify, redirect, send_from_directory, render_template, Response, session
 import requests
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from dotenv  import load_dotenv
 
 # Load environment variables
@@ -230,6 +230,16 @@ def password_reset_request():
 @app.route('/api/password-resets/reset', methods=['POST'])
 def password_reset_reset():
     response, server = get_api_response('/api/password-resets/reset', 'POST', request.json)
+    if response:
+        return jsonify(response.json()), response.status_code
+    else:
+        return jsonify({'error': 'Backend unavailable or error occurred'}), 500
+
+# === Registration ===
+@app.route('/api/auth/register', methods=['POST'])
+@cross_origin()
+def register():
+    response, server = get_api_response('/api/auth/register', 'POST', request.json)
     if response:
         return jsonify(response.json()), response.status_code
     else:
