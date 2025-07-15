@@ -37,23 +37,34 @@ def get_api_response(endpoint, method='GET', data=None, timeout=API_TIMEOUT):
     url = f'{LOCAL_API}{endpoint}'
     print(f"🔍 API Request - Method: {method}, URL: {url}")
     print(f"🔍 API Request - Data: {data}")
-    
+
     try:
+        headers = {"Content-Type": "application/json"}
+        # Forward client cookies to backend
+        req_args = {
+            'url': url,
+            'headers': headers,
+            'cookies': request.cookies,
+            'timeout': timeout
+        }
+
         if method == 'GET':
-            response = requests.get(url, timeout=timeout)
+            response = requests.get(**req_args)
         elif method == 'POST':
-            response = requests.post(url, json=data, timeout=timeout)
+            req_args['json'] = data
+            response = requests.post(**req_args)
         elif method == 'PUT':
-            response = requests.put(url, json=data, timeout=timeout)
+            req_args['json'] = data
+            response = requests.put(**req_args)
         else:
             raise ValueError(f"Unsupported HTTP method: {method}")
-        if response is not None:
-            print(f"✅ Using local server for {endpoint} (status: {response.status_code})")
-            print(f"Response body: {response.text}")
-            return response, 'local'  # Return any HTTP response, not just 200
+
+        print(f"✅ Response status: {response.status_code}")
+        print(f"Response body: {response.text}")
+        return response, 'local'
     except Exception as e:
-        print(f"❌ Local server failed for {endpoint}: {str(e)}")
-    return None, None
+        print(f"❌ Request error: {str(e)}")
+        return None, None
 
 # === Session Management Helper ===
 def is_user_logged_in():
