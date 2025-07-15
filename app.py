@@ -38,6 +38,9 @@ def get_api_response(endpoint, method='GET', data=None, timeout=API_TIMEOUT):
     Send a request to the local backend API and return the response.
     """
     url = f'{LOCAL_API}{endpoint}'
+    print(f"🔍 API Request - Method: {method}, URL: {url}")
+    print(f"🔍 API Request - Data: {data}")
+    
     try:
         if method == 'GET':
             response = requests.get(url, timeout=timeout)
@@ -97,6 +100,9 @@ def serve_static(path):
 @app.route('/api/auth/login', methods=['POST'])
 def proxy_login():
     data = request.json or {}
+    print(f"🔍 Login attempt - Data: {data}")
+    print(f"🔍 Backend URL: {LOCAL_API}/api/auth/login")
+    
     try:
         resp = requests.post(
             f"{LOCAL_API}/api/auth/login", 
@@ -104,17 +110,23 @@ def proxy_login():
             headers={"Content-Type": "application/json"},
             cookies=request.cookies
         )
+        print(f"🔍 Express response status: {resp.status_code}")
+        print(f"🔍 Express response body: {resp.text}")
+        
         if resp.status_code == 200:
             # Store user session data securely
             session['logged_in'] = True
             session['user_email'] = data.get('email', '')
             session['device_id'] = data.get('device_id', '')
             session['login_time'] = int(time.time())
+            print(f"✅ Login successful for {data.get('email', '')}")
             return jsonify({"success": True, "message": "Login successful"}), 200
         else:
             logging.info(f"Failed login for {data.get('email', '')} from {request.remote_addr}")
+            print(f"❌ Login failed - Status: {resp.status_code}, Response: {resp.text}")
             return jsonify({"success": False, "error": resp.json().get("error", "Login failed")}), resp.status_code
     except Exception as e:
+        print(f"❌ Exception during login: {str(e)}")
         return jsonify({"success": False, "error": "An error occurred while logging in."}), 500
 
 @app.route('/api/auth/logout', methods=['POST'])
