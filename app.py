@@ -34,9 +34,6 @@ API_TIMEOUT = int(os.getenv('API_TIMEOUT', 2))
 
 
 def get_api_response(endpoint, method='GET', data=None, timeout=API_TIMEOUT):
-    """
-    Send a request to the local backend API and return the response.
-    """
     url = f'{LOCAL_API}{endpoint}'
     print(f"🔍 API Request - Method: {method}, URL: {url}")
     print(f"🔍 API Request - Data: {data}")
@@ -114,19 +111,25 @@ def proxy_login():
         print(f"🔍 Express response body: {resp.text}")
         
         if resp.status_code == 200:
-            # Store user session data securely
+            # ✅ Forward Set-Cookie header to browser
+            flask_response = jsonify({"success": True, "message": "Login successful"})
+            if 'set-cookie' in resp.headers:
+                flask_response.headers['Set-Cookie'] = resp.headers['set-cookie']
+            
+            # Set Flask session (optional)
             session['logged_in'] = True
-            session['user_email'] = data.get('email', '')
-            session['device_id'] = data.get('device_id', '')
+            session['user_email'] = data.get('email', '').strip()
+            session['device_id'] = data.get('device_id', '').strip()
             session['login_time'] = int(time.time())
             print(f"✅ Login successful for {data.get('email', '')}")
-            return jsonify({"success": True, "message": "Login successful"}), 200
+            
+            return flask_response, 200
         else:
             logging.info(f"Failed login for {data.get('email', '')} from {request.remote_addr}")
             print(f"❌ Login failed - Status: {resp.status_code}, Response: {resp.text}")
             return jsonify({"success": False, "error": resp.json().get("error", "Login failed")}), resp.status_code
     except Exception as e:
-        print(f"❌ Exception during login: {str(e)}")
+        print(f"❌ Error during login: {str(e)}")
         return jsonify({"success": False, "error": "An error occurred while logging in."}), 500
 
 @app.route('/api/auth/logout', methods=['POST'])
@@ -271,3 +274,7 @@ def register():
 if __name__ == '__main__':
     port = int(os.getenv('PORT', 10000))
     app.run(debug=False, host='0.0.0.0', port=port)
+
+@app.route('/debug-cookies')
+def debug_cookies():
+    return jsonify(dict(request.cookies))
