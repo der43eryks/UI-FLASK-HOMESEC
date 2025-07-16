@@ -43,3 +43,48 @@ INFO:werkzeug:127.0.0.1 - - [15/Jul/2025 03:12:23] "[36mGET /static/js/validati
 INFO:werkzeug:127.0.0.1 - - [15/Jul/2025 03:12:23] "[36mGET /static/images/lock.svg HTTP/1.1[0m" 304 -
 INFO:werkzeug:127.0.0.1 - - [15/Jul/2025 03:13:35] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
 INFO:werkzeug:127.0.0.1 - - [15/Jul/2025 03:13:35] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:10000
+ * Running on http://192.168.137.64:10000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug:127.0.0.1 - - [15/Jul/2025 14:24:37] "[32mGET / HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [15/Jul/2025 14:24:37] "GET /login HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [15/Jul/2025 14:24:37] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [15/Jul/2025 14:24:38] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [15/Jul/2025 14:24:38] "[36mGET /static/images/lock.svg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [15/Jul/2025 14:24:38] "[36mGET /static/js/validation/LoginValidations.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [15/Jul/2025 14:24:39] "[36mGET /static/images/register-bg.jpg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [15/Jul/2025 14:25:44] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [15/Jul/2025 14:25:44] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:10000
+ * Running on http://192.168.137.64:10000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug:127.0.0.1 - - [15/Jul/2025 21:17:13] "[32mGET / HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [15/Jul/2025 21:17:13] "GET /login HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [15/Jul/2025 21:17:14] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [15/Jul/2025 21:17:14] "GET /static/js/login.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [15/Jul/2025 21:17:14] "[36mGET /static/images/lock.svg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [15/Jul/2025 21:17:14] "[36mGET /static/js/validation/LoginValidations.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [15/Jul/2025 21:17:14] "[36mGET /static/images/register-bg.jpg HTTP/1.1[0m" 304 -
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:10000
+ * Running on http://192.168.137.64:10000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug:127.0.0.1 - - [15/Jul/2025 22:45:08] "[32mGET / HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [15/Jul/2025 22:45:08] "GET /login HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [15/Jul/2025 22:45:08] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [15/Jul/2025 22:45:08] "GET /static/js/login.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [15/Jul/2025 22:45:08] "[36mGET /static/js/validation/LoginValidations.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [15/Jul/2025 22:45:08] "[36mGET /static/images/lock.svg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [15/Jul/2025 22:45:09] "[36mGET /static/images/register-bg.jpg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [15/Jul/2025 23:06:27] "GET /register HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [15/Jul/2025 23:06:28] "[36mGET /static/css/register.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [15/Jul/2025 23:06:28] "[36mGET /static/images/lock.svg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [15/Jul/2025 23:06:28] "[36mGET /static/images/register-bg.jpg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [15/Jul/2025 23:06:28] "GET /static/js/register.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [15/Jul/2025 23:06:28] "[36mGET /static/js/validation/registerValidations.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [15/Jul/2025 23:06:28] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -

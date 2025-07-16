@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Always trim input values
         const email = emailInput.value.trim();
-        const password = passwordInput.value;
+        const password = passwordInput.value.trim();
         const device_id = deviceIdInput.value.trim();
 
         let valid = true;
@@ -155,9 +155,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     window.location.href = '/dashboard';
                 });
             } else {
+              
                 loginError.textContent = data.error || 'Login failed. Please check your credentials.';
+                console.log('am here find me, the bug');
             }
         } catch (err) {
+            console.log("hey am here, find me")
             loadingText.style.display = 'none';
             loginError.textContent = 'Could not connect to server. Please try again later.';
         }
