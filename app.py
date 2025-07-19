@@ -2,11 +2,16 @@ import os
 import time
 from flask import Flask, request, jsonify, redirect, send_from_directory, render_template, Response, session
 import requests
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from dotenv  import load_dotenv
+import logging
+from typing import Optional
 
 # Load environment variables
 load_dotenv()
+
+# Configure logging
+logging.basicConfig(level=logging.INFO, filename='login_attempts.log')
 
 app = Flask(__name__, static_url_path='/static')
 CORS(app, supports_credentials=True)
@@ -21,41 +26,53 @@ app.config.update(
     PERMANENT_SESSION_LIFETIME=3600  # Session lifetime in seconds
 )
 
-# FRONTEND/UI URL (for reference, not for API calls)
-ONLINE_CLIENT_RENDER = os.getenv('ONLINE_CLIENT_RENDER')
-app.config['ONLINE_CLIENT_RENDER'] = ONLINE_CLIENT_RENDER
 
-# BACKEND/API URL (for all proxied API calls)
-ONLINE_API = os.getenv('ONLINE_API_URL', 'https://homesecurity-cw0e.onrender.com')
-LOCAL_API = os.getenv('LOCAL_API_URL', ONLINE_API)
+#BACKEND/API URL (for all proxied API calls)
+#ONLINE_API = os.getenv('ONLINE_API_URL','LOCAL_API = os.getenv('LOCAL_API_URL', ONLINE_API)
+# Load both backend URLs
+LOCAL_API = os.getenv('BACKEND_URL')
+FALLBACK_API = os.getenv('FALLBACK_BACKEND_URL')
+
+# Optional: allow forcing fallback only
+USE_FALLBACK_ONLY = os.getenv('USE_FALLBACK_ONLY', 'false').lower() == 'true'
+
+
 API_TIMEOUT = int(os.getenv('API_TIMEOUT', 2))
 
 
 def get_api_response(endpoint, method='GET', data=None, timeout=API_TIMEOUT):
-    """
-    Try local server first, then fallback to online server
-    Returns (response, server_used) tuple
-    """
-    servers = [
-        (LOCAL_API, 'local'),
-        (ONLINE_API, 'online')
-    ]
-    for server_url, server_name in servers:
-        try:
-            url = f'{server_url}{endpoint}'
-            if method == 'GET':
-                response = requests.get(url, timeout=timeout)
-            elif method == 'POST':
-                response = requests.post(url, json=data, timeout=timeout)
-            elif method == 'PUT':
-                response = requests.put(url, json=data, timeout=timeout)
-            if response is not None:
-                print(f"✅ Using {server_name} server for {endpoint} (status: {response.status_code})")
-                print(f"Response body: {response.text}")
-                return response, server_name  # Return any HTTP response, not just 200
-        except Exception as e:
-            print(f"❌ {server_name} server failed for {endpoint}: {str(e)}")
+    # Try main backend first, then fallback if needed
+    urls = [FALLBACK_API] if USE_FALLBACK_ONLY else [LOCAL_API, FALLBACK_API]
+    for base_url in urls:
+        if not base_url:
             continue
+        url = f'{base_url}{endpoint}'
+        print(f"🔍 API Request - Method: {method}, URL: {url}")
+        print(f"🔍 API Request - Data: {data}")
+        try:
+            headers = {"Content-Type": "application/json"}
+            req_args = {
+                'url': url,
+                'headers': headers,
+                'cookies': request.cookies,
+                'timeout': timeout
+            }
+            if method == 'GET':
+                response = requests.get(**req_args)
+            elif method == 'POST':
+                req_args['json'] = data
+                response = requests.post(**req_args)
+            elif method == 'PUT':
+                req_args['json'] = data
+                response = requests.put(**req_args)
+            else:
+                raise ValueError(f"Unsupported HTTP method: {method}")
+
+            print(f"✅ Response status: {response.status_code}")
+            print(f"Response body: {response.text}")
+            return response, base_url
+        except Exception as e:
+            print(f"❌ Request error for {base_url}: {str(e)}")
     return None, None
 
 # === Session Management Helper ===
@@ -85,40 +102,54 @@ def login_page():
 def dashboard_page():
     return render_template('dashboard.html')
 
+@app.route('/register')
+def register_page():
+    return render_template('register.html')
+
 @app.route('/static/<path:path>')
 def serve_static(path):
     return send_from_directory('static', path)
 
 # === Health Check ===
-@app.route('/api/health', methods=['GET'])
-def health_check():
-    response, server = get_api_response('/api/health', 'GET')
-    if response:
-        return jsonify(response.json()), response.status_code
-    else:
-        return jsonify({'error': 'Backend unavailable or error occurred'}), 500
+# Removed: /api/health
 
 # === Authentication ===
 @app.route('/api/auth/login', methods=['POST'])
 def proxy_login():
-    data = request.json
+    data = request.json or {}
+    print(f"🔍 Login attempt - Data: {data}")
+    print(f"🔍 Backend URL: {LOCAL_API}/api/auth/login")
+    
     try:
         resp = requests.post(
-            f"{ONLINE_API}/api/auth/login",
+            f"{LOCAL_API}/api/auth/login", 
             json=data,
             headers={"Content-Type": "application/json"},
             cookies=request.cookies
         )
+        print(f"🔍 Express response status: {resp.status_code}")
+        print(f"🔍 Express response body: {resp.text}")
+        
         if resp.status_code == 200:
-            # Store user session data securely
-            session['logged_in'] = True
-            session['user_email'] = data.get('email', '')
-            session['login_time'] = int(time.time())
+            # ✅ Forward Set-Cookie header to browser
+            flask_response = jsonify({"success": True, "message": "Login successful"})
+            if 'set-cookie' in resp.headers:
+                flask_response.headers['Set-Cookie'] = resp.headers['set-cookie']
             
-            return jsonify({"success": True, "message": "Login successful"}), 200
+            # Set Flask session (optional)
+            session['logged_in'] = True
+            session['user_email'] = data.get('email', '').strip()
+            session['device_id'] = data.get('device_id', '').strip()
+            session['login_time'] = int(time.time())
+            print(f"✅ Login successful for {data.get('email', '')}")
+            
+            return flask_response, 200
         else:
+            logging.info(f"Failed login for {data.get('email', '')} from {request.remote_addr}")
+            print(f"❌ Login failed - Status: {resp.status_code}, Response: {resp.text}")
             return jsonify({"success": False, "error": resp.json().get("error", "Login failed")}), resp.status_code
     except Exception as e:
+        print(f"❌ Error during login: {str(e)}")
         return jsonify({"success": False, "error": "An error occurred while logging in."}), 500
 
 @app.route('/api/auth/logout', methods=['POST'])
@@ -131,20 +162,10 @@ def auth_logout():
     if response:
         return jsonify(response.json()), response.status_code
     else:
-        return jsonify({'error': 'Backend unavailable or error occurred'}), 500
+        return jsonify({'error': 'server unavailable or error occurred'}), 500
 
 # === Session Check ===
-@app.route('/api/auth/session', methods=['GET'])
-def check_session():
-    """Check if user session is valid"""
-    if is_user_logged_in():
-        return jsonify({
-            "logged_in": True,
-            "user_email": session.get('user_email', ''),
-            "login_time": session.get('login_time', 0)
-        }), 200
-    else:
-        return jsonify({"logged_in": False}), 401
+# Removed: /api/auth/session
 
 # === User Management ===
 @app.route('/api/users/me', methods=['GET'])
@@ -153,21 +174,10 @@ def users_me():
     if response:
         return jsonify(response.json()), response.status_code
     else:
-        return jsonify({'error': 'Backend unavailable or error occurred'}), 500
+        return jsonify({'error': 'Failed to get user'}), 500
 
 @app.route('/api/users/profile', methods=['GET'])
-def proxy_user_profile():
-    try:
-        resp = requests.get(
-            f"{ONLINE_API}/api/users/profile",
-            cookies=request.cookies
-        )
-        if resp.status_code == 200:
-            return jsonify(resp.json()), 200
-        else:
-            return jsonify({"error": resp.json().get("error", "Failed to retrieve user profile")}), resp.status_code
-    except Exception as e:
-        return jsonify({"error": "An error occurred while retrieving user profile."}), 500
+# Removed: /api/users/profile
 
 @app.route('/api/users/email', methods=['PUT'])
 def update_email():
@@ -175,7 +185,7 @@ def update_email():
     if response:
         return jsonify(response.json()), response.status_code
     else:
-        return jsonify({'error': 'Backend unavailable or error occurred'}), 500
+        return jsonify({'error': 'server unavailable or error occurred'}), 500
 
 @app.route('/api/users/phone', methods=['PUT'])
 def update_phone():
@@ -183,7 +193,7 @@ def update_phone():
     if response:
         return jsonify(response.json()), response.status_code
     else:
-        return jsonify({'error': 'Backend unavailable or error occurred'}), 500
+        return jsonify({'error': 'server unavailable or error occurred'}), 500
 
 @app.route('/api/users/password', methods=['PUT'])
 def update_password():
@@ -191,7 +201,7 @@ def update_password():
     if response:
         return jsonify(response.json()), response.status_code
     else:
-        return jsonify({'error': 'Backend unavailable or error occurred'}), 500
+        return jsonify({'error': 'server unavailable or error occurred'}), 500
 
 # === Device Management ===
 @app.route('/api/devices/me', methods=['GET'])
@@ -200,7 +210,7 @@ def devices_me():
     if response:
         return jsonify(response.json()), response.status_code
     else:
-        return jsonify({'error': 'Backend unavailable or error occurred'}), 500
+        return jsonify({'error': 'server unavailable or error occurred'}), 500
 
 @app.route('/api/devices/status', methods=['GET'])
 def devices_status():
@@ -208,7 +218,7 @@ def devices_status():
     if response:
         return jsonify(response.json()), response.status_code
     else:
-        return jsonify({'error': 'Backend unavailable or error occurred'}), 500
+        return jsonify({'error': 'server unavailable or error occurred'}), 500
 
 # === Alerts ===
 @app.route('/api/alerts', methods=['GET'])
@@ -217,12 +227,12 @@ def alerts():
     if response:
         return jsonify(response.json()), response.status_code
     else:
-        return jsonify({'error': 'Backend unavailable or error occurred'}), 500
+        return jsonify({'error': 'Failure to get alerts'}), 500
 
 @app.route('/api/sse/alerts', methods=['GET'])
 def proxy_sse_alerts():
     def generate():
-        backend_url = f"{ONLINE_API}/api/sse/alerts"
+        backend_url = f"{LOCAL_API}/api/sse/alerts"
         headers = {"Accept": "text/event-stream"}
         while True:
             try:
@@ -263,14 +273,28 @@ def password_reset_reset():
     if response:
         return jsonify(response.json()), response.status_code
     else:
-        return jsonify({'error': 'Backend unavailable or error occurred'}), 500
+        return jsonify({'error': 'server unavailable or error occurred'}), 500
 
-# Make ONLINE_CLIENT_RENDER available in all templates
-@app.context_processor
-def inject_online_client_render():
-    return dict(ONLINE_CLIENT_RENDER=ONLINE_CLIENT_RENDER)
+# === Registration ===
+@app.route('/api/auth/register', methods=['POST'])
+@cross_origin()
+def register():
+    response, server = get_api_response('/api/auth/register', 'POST', request.json)
+    if response:
+        return jsonify(response.json()), response.status_code
+    else:
+        return jsonify({'error': 'server unavailable or error occurred'}), 500
+
+# # Make ONLINE_CLIENT_RENDER available in all templates
+# @app.context_processor
+# def inject_online_client_render():
+#     return dict(ONLINE_CLIENT_RENDER=ONLINE_CLIENT_RENDER)
 
 # === Run the Server ===
 if __name__ == '__main__':
     port = int(os.getenv('PORT', 10000))
     app.run(debug=False, host='0.0.0.0', port=port)
+
+@app.route('/debug-cookies')
+def debug_cookies():
+    return jsonify(dict(request.cookies))
