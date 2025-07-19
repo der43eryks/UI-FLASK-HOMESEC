@@ -140,7 +140,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
         try {
             // Use credentials: 'include' for cookies/session support
-            const res = await fetch('http://localhost:4000/api/auth/login', {
+            const BACKEND_URL = process.env.BACKEND_UR
+            const res = await fetch(`${BACKEND_UR}api/auth/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password, device_id }),
@@ -151,16 +152,14 @@ document.addEventListener('DOMContentLoaded', function () {
             if (res.ok && data.success) {
                 sessionStorage.setItem('userEmail', email);
                 sessionStorage.setItem('deviceId', device_id);
-                showPopup('You have logged in successfully!', () => {
+                showPopup('Login successful', () => {
                     window.location.href = '/dashboard';
                 });
             } else {
               
                 loginError.textContent = data.error || 'Login failed. Please check your credentials.';
-                console.log('am here find me, the bug');
             }
         } catch (err) {
-            console.log("hey am here, find me")
             loadingText.style.display = 'none';
             loginError.textContent = 'Could not connect to server. Please try again later.';
         }

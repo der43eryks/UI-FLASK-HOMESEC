@@ -192,20 +192,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
         try {
             // Use credentials: 'include' for cookies/session support
-            const res = await fetch('http://localhost:4000/api/auth/register', {
+            const  BACKEND_URL =process.env.BACKEND_URL
+            const res = await fetch(`${BACKEND_URL}/api/auth/register`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload),
                 credentials: 'include'
             });
             const data = await res.json();
+            //this is the main issue
             if (res.ok && data.message === 'Registration successful') {
                 form.reset();
                 showPopup('You have been registered successfully!', () => {
                     window.location.href = '/login';
                 });
             } else {
-                formError.textContent = data.error || (data.errors ? data.errors.join(', ') : 'Registration failed.');
+                formError.textContent = data.error || (data.errors ? data.errors.join(', ') : 'Registration failed please try again.');
             }
         } catch (err) {
             formError.textContent = 'Could not connect to server. Please try again later.';

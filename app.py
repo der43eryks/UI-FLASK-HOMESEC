@@ -162,7 +162,7 @@ def auth_logout():
     if response:
         return jsonify(response.json()), response.status_code
     else:
-        return jsonify({'error': 'Backend unavailable or error occurred'}), 500
+        return jsonify({'error': 'server unavailable or error occurred'}), 500
 
 # === Session Check ===
 # Removed: /api/auth/session
@@ -185,7 +185,7 @@ def update_email():
     if response:
         return jsonify(response.json()), response.status_code
     else:
-        return jsonify({'error': 'Backend unavailable or error occurred'}), 500
+        return jsonify({'error': 'server unavailable or error occurred'}), 500
 
 @app.route('/api/users/phone', methods=['PUT'])
 def update_phone():
@@ -193,7 +193,7 @@ def update_phone():
     if response:
         return jsonify(response.json()), response.status_code
     else:
-        return jsonify({'error': 'Backend unavailable or error occurred'}), 500
+        return jsonify({'error': 'server unavailable or error occurred'}), 500
 
 @app.route('/api/users/password', methods=['PUT'])
 def update_password():
@@ -201,7 +201,7 @@ def update_password():
     if response:
         return jsonify(response.json()), response.status_code
     else:
-        return jsonify({'error': 'Backend unavailable or error occurred'}), 500
+        return jsonify({'error': 'server unavailable or error occurred'}), 500
 
 # === Device Management ===
 @app.route('/api/devices/me', methods=['GET'])
@@ -210,7 +210,7 @@ def devices_me():
     if response:
         return jsonify(response.json()), response.status_code
     else:
-        return jsonify({'error': 'Backend unavailable or error occurred'}), 500
+        return jsonify({'error': 'server unavailable or error occurred'}), 500
 
 @app.route('/api/devices/status', methods=['GET'])
 def devices_status():
@@ -218,7 +218,7 @@ def devices_status():
     if response:
         return jsonify(response.json()), response.status_code
     else:
-        return jsonify({'error': 'Backend unavailable or error occurred'}), 500
+        return jsonify({'error': 'server unavailable or error occurred'}), 500
 
 # === Alerts ===
 @app.route('/api/alerts', methods=['GET'])
@@ -273,7 +273,7 @@ def password_reset_reset():
     if response:
         return jsonify(response.json()), response.status_code
     else:
-        return jsonify({'error': 'Backend unavailable or error occurred'}), 500
+        return jsonify({'error': 'server unavailable or error occurred'}), 500
 
 # === Registration ===
 @app.route('/api/auth/register', methods=['POST'])
@@ -283,7 +283,7 @@ def register():
     if response:
         return jsonify(response.json()), response.status_code
     else:
-        return jsonify({'error': 'Backend unavailable or error occurred'}), 500
+        return jsonify({'error': 'server unavailable or error occurred'}), 500
 
 # # Make ONLINE_CLIENT_RENDER available in all templates
 # @app.context_processor

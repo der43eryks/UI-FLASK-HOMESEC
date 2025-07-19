@@ -13,14 +13,18 @@ export function validateLoginPassword(password) {
     if (!password) return 'Password is required.';
     if (!/^\d{8,16}$/.test(password))
         return 'Password must be 8-16 digits and contain only numbers.';
-    if (password !== '12345678')
-        return 'Password must be exactly 12345678.';
+    if (password === '')
+        return 'Password  cannot ocntain spaces.';
+    if (password.length() < 8)
+        return 'Password must be 8 to 16 digits only'
+    if (password.length() >=  8 &&  password.length() <= 16 )
+        return 'Password is valid'
     return '';
 }
 
 export function validateLoginDeviceId(deviceId) {
     if (!deviceId) return 'Device ID is required.';
     if (!/^\d+$/.test(deviceId))
-        return 'Device ID must be numeric (e.g., 23456786).';
+        return 'Device ID must be digits only (e.g., 23456786).';
     return '';
 } 
