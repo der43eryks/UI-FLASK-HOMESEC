@@ -17,11 +17,11 @@ app = Flask(__name__, static_url_path='/static')
 CORS(app, supports_credentials=True)
 
 # Flask Configuration with Secure Session Management
-if not os.getenv('FLASK_SECRET_KEY'):
-    raise ValueError("FLASK_SECRET_KEY environment variable is required")
+if not os.getenv('JWT_SECRET'):
+    raise ValueError("JWT_SECRET environment variable is required")
 
 app.config.update(
-    SECRET_KEY=os.getenv('FLASK_SECRET_KEY'),
+    SECRET_KEY=os.getenv('JWT_SECRET'),  # Use the same secret as the backend
     SESSION_COOKIE_SECURE=True,      # Only send cookie over HTTPS
     SESSION_COOKIE_HTTPONLY=True,    # Prevent JavaScript access to cookie
     SESSION_COOKIE_SAMESITE='Lax',   # Mitigate CSRF attacks
