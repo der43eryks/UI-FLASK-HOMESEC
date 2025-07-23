@@ -17,8 +17,11 @@ app = Flask(__name__, static_url_path='/static')
 CORS(app, supports_credentials=True)
 
 # Flask Configuration with Secure Session Management
+if not os.getenv('FLASK_SECRET_KEY'):
+    raise ValueError("FLASK_SECRET_KEY environment variable is required")
+
 app.config.update(
-    SECRET_KEY=os.environ.get('FLASK_SECRET_KEY', 'fallback-secret-key-change-in-production'),
+    SECRET_KEY=os.getenv('FLASK_SECRET_KEY'),
     SESSION_COOKIE_SECURE=True,      # Only send cookie over HTTPS
     SESSION_COOKIE_HTTPONLY=True,    # Prevent JavaScript access to cookie
     SESSION_COOKIE_SAMESITE='Lax',   # Mitigate CSRF attacks
@@ -27,25 +30,21 @@ app.config.update(
 )
 
 
-# Backend API URL Configuration
-BACKEND_URL = os.getenv('BACKEND_URL', 'https://homesecurity-cw0e.onrender.com')
-FALLBACK_URL = os.getenv('FALLBACK_BACKEND_URL')  # Optional fallback URL
+# Backend API Configuration
+BACKEND_URL = os.getenv('BACKEND_URL')
+if not BACKEND_URL:
+    raise ValueError("BACKEND_URL environment variable is required")
 
-# Control whether to use fallback
-USE_FALLBACK = os.getenv('USE_FALLBACK', 'false').lower() == 'true'
-
-
+# API timeout in seconds
 API_TIMEOUT = int(os.getenv('API_TIMEOUT', 2))
 
 
 def get_api_response(endpoint, method='GET', data=None, timeout=API_TIMEOUT):
-    """Make an API request to the backend with optional fallback."""
-    # Determine which URL to use
-    base_url = FALLBACK_URL if USE_FALLBACK and FALLBACK_URL else BACKEND_URL
-    url = f'{base_url}{endpoint}'
+    """Make an API request to the backend."""
+    url = f'{BACKEND_URL}{endpoint}'
     
-    # Log the request (but mask sensitive data)
-    masked_url = url.replace(base_url, '[BACKEND_URL]')
+    # Log the request (mask sensitive data)
+    masked_url = url.replace(BACKEND_URL, '[BACKEND_URL]')
     print(f"🔍 API Request - Method: {method}, URL: {masked_url}")
     print(f"🔍 API Request - Data: {data}")
     try:
@@ -69,10 +68,10 @@ def get_api_response(endpoint, method='GET', data=None, timeout=API_TIMEOUT):
 
         print(f"✅ Response status: {response.status_code}")
         print(f"Response body: {response.text}")
-        return response, base_url
+        return response
     except Exception as e:
-        print(f"❌ Request error for {base_url}: {str(e)}")
-    return None, None
+        print(f"❌ Request error: {str(e)}")
+    return None
 
 # === Session Management Helper ===
 def is_user_logged_in():
@@ -157,7 +156,7 @@ def auth_logout():
     session.clear()
     
     # Forward logout request to backend
-    response, server = get_api_response('/api/auth/logout', 'POST')
+    response = get_api_response('/api/auth/logout', 'POST')
     if response:
         return jsonify(response.json()), response.status_code
     else:
@@ -169,7 +168,7 @@ def auth_logout():
 # === User Management ===
 @app.route('/api/users/me', methods=['GET'])
 def users_me():
-    response, server = get_api_response('/api/users/me', 'GET')
+    response = get_api_response('/api/users/me', 'GET')
     if response:
         return jsonify(response.json()), response.status_code
     else:
@@ -180,7 +179,7 @@ def users_me():
 
 @app.route('/api/users/email', methods=['PUT'])
 def update_email():
-    response, server = get_api_response('/api/users/email', 'PUT', request.json)
+    response = get_api_response('/api/users/email', 'PUT', request.json)
     if response:
         return jsonify(response.json()), response.status_code
     else:
@@ -188,7 +187,7 @@ def update_email():
 
 @app.route('/api/users/phone', methods=['PUT'])
 def update_phone():
-    response, server = get_api_response('/api/users/phone', 'PUT', request.json)
+    response = get_api_response('/api/users/phone', 'PUT', request.json)
     if response:
         return jsonify(response.json()), response.status_code
     else:
@@ -196,7 +195,7 @@ def update_phone():
 
 @app.route('/api/users/password', methods=['PUT'])
 def update_password():
-    response, server = get_api_response('/api/users/password', 'PUT', request.json)
+    response = get_api_response('/api/users/password', 'PUT', request.json)
     if response:
         return jsonify(response.json()), response.status_code
     else:
@@ -205,7 +204,7 @@ def update_password():
 # === Device Management ===
 @app.route('/api/devices/me', methods=['GET'])
 def devices_me():
-    response, server = get_api_response('/api/devices/me', 'GET')
+    response = get_api_response('/api/devices/me', 'GET')
     if response:
         return jsonify(response.json()), response.status_code
     else:
@@ -213,7 +212,7 @@ def devices_me():
 
 @app.route('/api/devices/status', methods=['GET'])
 def devices_status():
-    response, server = get_api_response('/api/devices/status', 'GET')
+    response = get_api_response('/api/devices/status', 'GET')
     if response:
         return jsonify(response.json()), response.status_code
     else:
@@ -222,7 +221,7 @@ def devices_status():
 # === Alerts ===
 @app.route('/api/alerts', methods=['GET'])
 def alerts():
-    response, server = get_api_response('/api/alerts', 'GET')
+    response = get_api_response('/api/alerts', 'GET')
     if response:
         return jsonify(response.json()), response.status_code
     else:
@@ -260,7 +259,7 @@ def proxy_sse_alerts():
 # === Password Resets ===
 @app.route('/api/password-resets/request', methods=['POST'])
 def password_reset_request():
-    response, server = get_api_response('/api/password-resets/request', 'POST', request.json)
+    response = get_api_response('/api/password-resets/request', 'POST', request.json)
     if response:
         return jsonify(response.json()), response.status_code
     else:
@@ -268,7 +267,7 @@ def password_reset_request():
 
 @app.route('/api/password-resets/reset', methods=['POST'])
 def password_reset_reset():
-    response, server = get_api_response('/api/password-resets/reset', 'POST', request.json)
+    response = get_api_response('/api/password-resets/reset', 'POST', request.json)
     if response:
         return jsonify(response.json()), response.status_code
     else:
@@ -278,7 +277,7 @@ def password_reset_reset():
 @app.route('/api/auth/register', methods=['POST'])
 @cross_origin()
 def register():
-    response, server = get_api_response('/api/auth/register', 'POST', request.json)
+    response = get_api_response('/api/auth/register', 'POST', request.json)
     if response:
         return jsonify(response.json()), response.status_code
     else:
