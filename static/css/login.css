@@ -21,13 +21,15 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 1;
-    width: 100%;
+    width: 90%;
     max-width: 400px;
     background: rgba(255,255,255,0.95);
     border-radius: 18px;
     box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
-    padding: 2.5rem 2rem 2rem 2rem;
+    padding: 2rem 1.5rem;
     animation: fadeInUp 1s cubic-bezier(.39,.575,.565,1.000);
+    margin: 1rem;
+    box-sizing: border-box;
 }
 
 @keyframes fadeInUp {
@@ -58,6 +60,7 @@ body {
 
 .input-group {
     margin-bottom: 1.2rem;
+    position: relative;
 }
 
 .input-group label {
@@ -66,6 +69,31 @@ body {
     color: #2d3a4b;
     margin-bottom: 0.3rem;
     font-weight: 500;
+}
+
+.input-group .validation-message {
+    position: absolute;
+    bottom: -20px;
+    left: 0;
+    font-size: 0.85rem;
+    color: #e74c3c;
+    transition: all 0.2s ease;
+}
+
+.input-group .success-message {
+    color: #27ae60;
+}
+
+@media (max-width: 480px) {
+    .input-group {
+        margin-bottom: 1.8rem;
+    }
+    .input-group input {
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+    .login-heading h2 {
+        font-size: 1.75rem;
+    }
 }
 
 .input-group input {
@@ -80,10 +108,26 @@ body {
     box-shadow: 0 1px 2px rgba(44,62,80,0.03);
 }
 
-.input-group input:focus, .input-group input:hover {
+.input-group input:focus {
     border: 1.5px solid #4f8cff;
     box-shadow: 0 0 8px 0 #4f8cff33;
     background: #fff;
+}
+
+.input-group input:hover:not(:focus) {
+    border: 1.5px solid #b0c4de;
+    background: #fff;
+    box-shadow: 0 2px 4px rgba(44,62,80,0.1);
+}
+
+.input-group.success input {
+    border-color: #27ae60;
+    background: #f0fff4;
+}
+
+.input-group.error input {
+    border-color: #e74c3c;
+    background: #fff5f5;
 }
 
 .login-btn {

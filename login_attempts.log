@@ -88,3 +88,169 @@ INFO:werkzeug:127.0.0.1 - - [15/Jul/2025 23:06:28] "[36mGET /static/images/regi
 INFO:werkzeug:127.0.0.1 - - [15/Jul/2025 23:06:28] "GET /static/js/register.js HTTP/1.1" 200 -
 INFO:werkzeug:127.0.0.1 - - [15/Jul/2025 23:06:28] "[36mGET /static/js/validation/registerValidations.js HTTP/1.1[0m" 304 -
 INFO:werkzeug:127.0.0.1 - - [15/Jul/2025 23:06:28] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:10000
+ * Running on http://192.168.180.38:10000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug:127.0.0.1 - - [19/Jul/2025 22:01:08] "[32mGET / HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [19/Jul/2025 22:01:08] "GET /login HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Jul/2025 22:01:09] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [19/Jul/2025 22:01:09] "GET /static/js/login.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Jul/2025 22:01:09] "[36mGET /static/images/lock.svg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [19/Jul/2025 22:01:09] "GET /static/js/validation/LoginValidations.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [19/Jul/2025 22:01:09] "[36mGET /static/images/register-bg.jpg HTTP/1.1[0m" 304 -
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:10000
+ * Running on http://192.168.180.38:10000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug:127.0.0.1 - - [20/Jul/2025 00:31:22] "[32mGET / HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [20/Jul/2025 00:31:22] "GET /login HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [20/Jul/2025 00:31:23] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [20/Jul/2025 00:31:23] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [20/Jul/2025 00:31:23] "[36mGET /static/js/validation/LoginValidations.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [20/Jul/2025 00:31:23] "[36mGET /static/images/lock.svg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [20/Jul/2025 00:31:23] "[36mGET /static/images/register-bg.jpg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [20/Jul/2025 00:32:35] "GET /login HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [20/Jul/2025 00:32:35] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [20/Jul/2025 00:32:35] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [20/Jul/2025 00:32:35] "[36mGET /static/images/register-bg.jpg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [20/Jul/2025 00:32:35] "GET /static/js/validation/LoginValidations.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [20/Jul/2025 00:32:35] "[36mGET /static/images/lock.svg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [20/Jul/2025 00:32:35] "[36mGET /static/images/lock.svg HTTP/1.1[0m" 304 -
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:10000
+ * Running on http://192.168.137.100:10000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug:127.0.0.1 - - [23/Jul/2025 23:36:04] "[32mGET / HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [23/Jul/2025 23:36:04] "GET /login HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Jul/2025 23:36:06] "[36mGET /static/images/lock.svg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [23/Jul/2025 23:36:06] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [23/Jul/2025 23:36:06] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [23/Jul/2025 23:36:06] "GET /static/js/validation/LoginValidations.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Jul/2025 23:36:07] "[36mGET /static/images/register-bg.jpg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [23/Jul/2025 23:43:49] "[32mGET / HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [23/Jul/2025 23:43:49] "GET /login HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Jul/2025 23:43:49] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [23/Jul/2025 23:43:49] "GET /static/js/login.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Jul/2025 23:43:49] "[36mGET /static/images/lock.svg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [23/Jul/2025 23:43:50] "GET /static/js/validation/LoginValidations.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Jul/2025 23:43:50] "[36mGET /static/images/register-bg.jpg HTTP/1.1[0m" 304 -
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:10000
+ * Running on http://192.168.137.100:10000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug:127.0.0.1 - - [23/Jul/2025 23:45:06] "GET /login HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [23/Jul/2025 23:45:07] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [23/Jul/2025 23:45:07] "[36mGET /static/images/lock.svg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [23/Jul/2025 23:45:07] "[36mGET /static/images/register-bg.jpg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [23/Jul/2025 23:45:07] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [23/Jul/2025 23:45:07] "[36mGET /static/js/validation/LoginValidations.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [23/Jul/2025 23:45:07] "[36mGET /static/images/lock.svg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 00:31:02] "[32mGET / HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 00:31:02] "GET /login HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 00:31:02] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 00:31:03] "GET /static/js/login.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 00:31:03] "[36mGET /static/images/lock.svg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 00:31:03] "[36mGET /static/js/validation/LoginValidations.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 00:31:03] "[36mGET /static/images/register-bg.jpg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 00:31:20] "[33mPOST /undefinedapi/auth/login HTTP/1.1[0m" 404 -
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:10000
+ * Running on http://192.168.137.100:10000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:02:14] "[32mGET / HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:02:14] "GET /login HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:02:15] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:02:15] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:02:15] "[36mGET /static/images/lock.svg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:02:15] "[36mGET /static/js/validation/LoginValidations.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:02:15] "[36mGET /static/images/register-bg.jpg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:02:58] "POST /api/auth/login HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:03:06] "GET /dashboard HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:03:07] "GET /static/css/dashboard.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:03:07] "GET /static/js/dashboard.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:03:07] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:03:08] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:03:12] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:03:14] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:03:17] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:03:21] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:03:23] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:03:26] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:03:29] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:03:33] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:03:34] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:03:38] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:03:41] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:03:44] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:03:47] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:03:50] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:03:57] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:03:57] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:03:59] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:04:02] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:04:05] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:04:08] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:04:11] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:04:14] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:04:18] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:04:20] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:04:23] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:04:26] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:04:30] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:04:32] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:04:35] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:04:39] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:04:41] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:04:44] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:04:47] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:04:50] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:04:54] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:04:56] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:05:00] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:05:02] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:05:05] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:05:08] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:05:12] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:05:14] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:05:17] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:05:20] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:05:23] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:05:26] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:05:29] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:05:32] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:05:35] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:05:37] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:05:41] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:05:43] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:05:47] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:05:50] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:05:53] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:05:56] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:05:58] "PUT /api/users/phone HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:05:58] "PUT /api/users/email HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:05:59] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:05:59] "PUT /api/users/phone HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:06:02] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:06:02] "PUT /api/users/email HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:06:05] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:06:08] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:06:11] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:06:14] "GET /login HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:06:14] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:06:14] "[36mGET /static/images/lock.svg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:06:14] "[36mGET /static/js/login.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:06:14] "[35m[1mGET /api/devices/status HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:06:14] "[36mGET /static/images/register-bg.jpg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:06:14] "[36mGET /static/js/validation/LoginValidations.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:06:18] "GET /register HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:06:18] "[36mGET /static/css/register.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:06:18] "[36mGET /static/images/lock.svg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:06:18] "GET /static/js/register.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:06:18] "[36mGET /static/images/register-bg.jpg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [24/Jul/2025 01:06:18] "[36mGET /static/js/validation/registerValidations.js HTTP/1.1[0m" 304 -

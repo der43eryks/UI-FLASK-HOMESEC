@@ -12,23 +12,29 @@ function debounce(fn, delay) {
   };
 }
 
-function showValidation(input, message) {
-  let msgElem = input.nextElementSibling;
-  if (!msgElem || !msgElem.classList.contains('validation-msg')) {
-    msgElem = document.createElement('div');
-    msgElem.className = 'validation-msg';
-    input.parentNode.insertBefore(msgElem, input.nextSibling);
-  }
-  msgElem.textContent = message;
-  msgElem.style.color = message ? '#e74c3c' : '#27ae60';
-  input.classList.toggle('input-error', !!message);
-  input.classList.toggle('input-success', !message);
+function showValidation(input, message, isSuccess = false) {
+    const inputGroup = input.closest('.input-group');
+    let msgElem = inputGroup.querySelector('.validation-message');
+    
+    if (!msgElem) {
+        msgElem = document.createElement('div');
+        msgElem.className = 'validation-message';
+        inputGroup.appendChild(msgElem);
+    }
+
+    if (message) {
+        msgElem.textContent = message;
+        msgElem.classList.toggle('success-message', isSuccess);
+        inputGroup.classList.remove(isSuccess ? 'error' : 'success');
+        inputGroup.classList.add(isSuccess ? 'success' : 'error');
+    } else {
+        msgElem.textContent = '';
+        inputGroup.classList.remove('error', 'success');
+    }
 }
 
 function showSuccess(input) {
-  showValidation(input, '');
-  input.classList.add('input-success');
-  input.classList.remove('input-error');
+    showValidation(input, 'Looks good!', true);
 }
 
 const MAX_LENGTHS = {
