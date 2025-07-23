@@ -1,6 +1,8 @@
+const BACKEND_URL = window.BACKEND_URL;
+
 async function fetchDeviceStatuses() {
     try {
-        const res = await fetch('/api/devices/status');
+        const res = await fetch(`${BACKEND_URL}/api/devices/status`);
         const data = await res.json();
 
         // Motion Sensor
@@ -89,11 +91,11 @@ function togglePasswordChangeSection() {
 async function saveProfile() {
     const phone = document.getElementById('phoneNumber').value;
     const email = document.getElementById('email').value;
-    await fetch('/api/users/phone', {
+    await fetch(`${BACKEND_URL}/api/users/phone`, {
         method: 'PUT', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ phone })
     });
-    await fetch('/api/users/email', {
+    await fetch(`${BACKEND_URL}/api/users/email`, {
         method: 'PUT', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email })
     });
@@ -105,7 +107,7 @@ async function changePassword() {
     const newPassword = document.getElementById('newPassword').value;
     const confirm = document.getElementById('confirmNewPassword').value;
     if (newPassword !== confirm) return alert("Passwords don't match.");
-    const res = await fetch('/api/users/password', {
+    const res = await fetch(`${BACKEND_URL}/api/users/password`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ currentPassword, newPassword })
@@ -118,7 +120,7 @@ async function changePassword() {
 
 async function resetPassword() {
     const email = document.getElementById('email').value;
-    const res = await fetch('/api/password-resets/request', {
+    const res = await fetch(`${BACKEND_URL}/api/password-resets/request`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email })

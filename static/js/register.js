@@ -191,8 +191,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (phone) payload.phone = phone;
 
         try {
-            // Use credentials: 'include' for cookies/session support
-            const  BACKEND_URL =process.env.BACKEND_URL
+            const BACKEND_URL = window.BACKEND_URL;
             const res = await fetch(`${BACKEND_URL}/api/auth/register`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
