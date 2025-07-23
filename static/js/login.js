@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         try {
             // Use credentials: 'include' for cookies/session support
-            const BACKEND_URL = 'https://homesecurity-cw0e.onrender.com/';
+            const BACKEND_URL = window.BACKEND_URL; // <-- Set your actual backend URL here
             const res = await fetch(`${BACKEND_URL}api/auth/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
