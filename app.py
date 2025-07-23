@@ -27,52 +27,51 @@ app.config.update(
 )
 
 
-#BACKEND/API URL (for all proxied API calls)
-#ONLINE_API = os.getenv('ONLINE_API_URL','LOCAL_API = os.getenv('LOCAL_API_URL', ONLINE_API)
-# Load both backend URLs
-LOCAL_API = os.getenv('BACKEND_URL')
-FALLBACK_API = os.getenv('FALLBACK_BACKEND_URL')
+# Backend API URL Configuration
+BACKEND_URL = os.getenv('BACKEND_URL', 'https://homesecurity-cw0e.onrender.com')
+FALLBACK_URL = os.getenv('FALLBACK_BACKEND_URL')  # Optional fallback URL
 
-# Optional: allow forcing fallback only
-USE_FALLBACK_ONLY = os.getenv('USE_FALLBACK_ONLY', 'false').lower() == 'true'
+# Control whether to use fallback
+USE_FALLBACK = os.getenv('USE_FALLBACK', 'false').lower() == 'true'
 
 
 API_TIMEOUT = int(os.getenv('API_TIMEOUT', 2))
 
 
 def get_api_response(endpoint, method='GET', data=None, timeout=API_TIMEOUT):
-    # Try main backend first, then fallback if needed
-    urls = [FALLBACK_API] if USE_FALLBACK_ONLY else [LOCAL_API, FALLBACK_API]
-    for base_url in urls:
-        if not base_url:
-            continue
-        url = f'{base_url}{endpoint}'
-        print(f"🔍 API Request - Method: {method}, URL: {url}")
-        print(f"🔍 API Request - Data: {data}")
-        try:
-            headers = {"Content-Type": "application/json"}
-            req_args = {
-                'url': url,
-                'headers': headers,
-                'cookies': request.cookies,
-                'timeout': timeout
-            }
-            if method == 'GET':
-                response = requests.get(**req_args)
-            elif method == 'POST':
-                req_args['json'] = data
-                response = requests.post(**req_args)
-            elif method == 'PUT':
-                req_args['json'] = data
-                response = requests.put(**req_args)
-            else:
-                raise ValueError(f"Unsupported HTTP method: {method}")
+    """Make an API request to the backend with optional fallback."""
+    # Determine which URL to use
+    base_url = FALLBACK_URL if USE_FALLBACK and FALLBACK_URL else BACKEND_URL
+    url = f'{base_url}{endpoint}'
+    
+    # Log the request (but mask sensitive data)
+    masked_url = url.replace(base_url, '[BACKEND_URL]')
+    print(f"🔍 API Request - Method: {method}, URL: {masked_url}")
+    print(f"🔍 API Request - Data: {data}")
+    try:
+        headers = {"Content-Type": "application/json"}
+        req_args = {
+            'url': url,
+            'headers': headers,
+            'cookies': request.cookies,
+            'timeout': timeout
+        }
+        if method == 'GET':
+            response = requests.get(**req_args)
+        elif method == 'POST':
+            req_args['json'] = data
+            response = requests.post(**req_args)
+        elif method == 'PUT':
+            req_args['json'] = data
+            response = requests.put(**req_args)
+        else:
+            raise ValueError(f"Unsupported HTTP method: {method}")
 
-            print(f"✅ Response status: {response.status_code}")
-            print(f"Response body: {response.text}")
-            return response, base_url
-        except Exception as e:
-            print(f"❌ Request error for {base_url}: {str(e)}")
+        print(f"✅ Response status: {response.status_code}")
+        print(f"Response body: {response.text}")
+        return response, base_url
+    except Exception as e:
+        print(f"❌ Request error for {base_url}: {str(e)}")
     return None, None
 
 # === Session Management Helper ===
@@ -118,11 +117,11 @@ def serve_static(path):
 def proxy_login():
     data = request.json or {}
     print(f"🔍 Login attempt - Data: {data}")
-    print(f"🔍 Backend URL: {LOCAL_API}/api/auth/login")
+    print(f"🔍 Backend URL: {BACKEND_URL}/api/auth/login")
     
     try:
         resp = requests.post(
-            f"{LOCAL_API}/api/auth/login", 
+            f"{BACKEND_URL}/api/auth/login", 
             json=data,
             headers={"Content-Type": "application/json"},
             cookies=request.cookies
@@ -232,7 +231,7 @@ def alerts():
 @app.route('/api/sse/alerts', methods=['GET'])
 def proxy_sse_alerts():
     def generate():
-        backend_url = f"{LOCAL_API}/api/sse/alerts"
+        backend_url = f"{BACKEND_URL}/api/sse/alerts"
         headers = {"Accept": "text/event-stream"}
         while True:
             try:
